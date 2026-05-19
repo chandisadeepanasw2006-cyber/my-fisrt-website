@@ -44,9 +44,10 @@
     .section-title{ text-align:center; font-size:2.7rem; margin-bottom:55px; font-weight:800; }
     .section-title span{ background:linear-gradient(90deg,#2ea0ff,#ff004f); -webkit-background-clip:text; -webkit-text-fill-color:transparent; }
     
-    /* ⚡ Admin Dashboard Sections Style (From your Screenshot) */
-    .admin-container { max-width: 600px; margin: 0 auto; background: rgba(255, 255, 255, 0.04); border: 1px solid rgba(255, 255, 255, 0.08); border-radius: 24px; padding: 40px; backdrop-filter: blur(15px); box-shadow: 0 20px 40px rgba(0, 0, 0, 0.45); }
-    .admin-container h3 { font-size: 1.8rem; font-weight: 700; margin-bottom: 25px; letter-spacing: 0.5px; text-align: left; }
+    /* ⚡ Admin Dashboard Style */
+    .admin-wrapper { max-width: 700px; margin: 0 auto; display: flex; flex-direction: column; gap: 30px; }
+    .admin-container { background: rgba(255, 255, 255, 0.04); border: 1px solid rgba(255, 255, 255, 0.08); border-radius: 24px; padding: 40px; backdrop-filter: blur(15px); box-shadow: 0 20px 40px rgba(0, 0, 0, 0.45); }
+    .admin-container h3 { font-size: 1.6rem; font-weight: 700; margin-bottom: 25px; letter-spacing: 0.5px; }
     .input-group { margin-bottom: 20px; }
     .input-group input { width: 100%; padding: 16px 20px; background: rgba(10, 14, 30, 0.6); border: 1px solid rgba(255, 255, 255, 0.1); border-radius: 14px; color: #fff; font-size: 0.95rem; transition: 0.3s; }
     .input-group input:focus { outline: none; border-color: #0077ff; box-shadow: 0 0 15px rgba(0, 119, 255, 0.2); }
@@ -54,6 +55,16 @@
     .admin-add-btn { width: 100%; padding: 16px; border: none; border-radius: 14px; background: #0077ff; color: #fff; font-size: 1rem; font-weight: 600; cursor: pointer; transition: 0.3s; box-shadow: 0 4px 15px rgba(0, 119, 255, 0.3); }
     .admin-add-btn:hover { background: #0062d1; transform: translateY(-2px); }
     .status-success { color: #00ff77; text-align: center; margin-top: 15px; font-size: 0.9rem; display: none; }
+
+    /* 📝 Manage Movies Table Style */
+    .manage-table { width: 100%; border-collapse: collapse; margin-top: 10px; }
+    .manage-table tr { border-bottom: 1px solid rgba(255, 255, 255, 0.06); }
+    .manage-table td { padding: 15px 10px; font-size: 0.95rem; }
+    .action-btns { display: flex; gap: 8px; justify-content: flex-end; }
+    .edit-inline-btn { background: #2ea0ff; color: #fff; border: none; padding: 6px 14px; border-radius: 8px; font-weight: 600; cursor: pointer; transition: 0.2s; }
+    .edit-inline-btn:hover { background: #0084ff; }
+    .delete-inline-btn { background: #ff004f; color: #fff; border: none; padding: 6px 14px; border-radius: 8px; font-weight: 600; cursor: pointer; transition: 0.2s; }
+    .delete-inline-btn:hover { background: #cc003f; }
 
     .features{ display:grid; grid-template-columns:repeat(auto-fit,minmax(250px,1fr)); gap:25px; }
     .feature-box{ background:rgba(255,255,255,0.05); border:1px solid rgba(255,255,255,0.08); border-radius:24px; padding:35px 25px; transition:0.4s; backdrop-filter:blur(12px); }
@@ -137,27 +148,36 @@
 
   <section id="adminSection" style="display:none; padding-top: 120px;">
     <h2 class="section-title">⚡ <span>CINEFLEX Admin Dashboard</span></h2>
-    <div class="admin-container">
-      <h3>Add New Movie</h3>
-      
-      <div class="input-group">
-        <input type="text" id="movieTitle" placeholder="Movie Title">
-      </div>
-      <div class="input-group">
-        <input type="text" id="movieGenre" placeholder="Genre (e.g. Action • Sci-Fi)">
-      </div>
-      <div class="input-group">
-        <input type="text" id="movieImg" placeholder="Image URL (Unsplash Link)">
-      </div>
-      <div class="input-group">
-        <input type="text" id="movieLink" placeholder="Watch / Stream URL">
-      </div>
-      <div class="input-group">
-        <input type="text" id="movieDownload" placeholder="Direct Download URL">
+    
+    <div class="admin-wrapper">
+      <div class="admin-container">
+        <h3 id="formTitle">Add New Movie</h3>
+        
+        <div class="input-group">
+          <input type="text" id="movieTitle" placeholder="Movie Title">
+        </div>
+        <div class="input-group">
+          <input type="text" id="movieGenre" placeholder="Genre (e.g. Action • Sci-Fi)">
+        </div>
+        <div class="input-group">
+          <input type="text" id="movieImg" placeholder="Image URL (Unsplash Link)">
+        </div>
+        <div class="input-group">
+          <input type="text" id="movieLink" placeholder="Watch / Stream URL">
+        </div>
+        <div class="input-group">
+          <input type="text" id="movieDownload" placeholder="Direct Download URL">
+        </div>
+
+        <button class="admin-add-btn" id="submitFormBtn" onclick="saveMovieFromDash()">Add Movie</button>
+        <div id="statusMsg" class="status-success">✔ Movie Action Successful!</div>
       </div>
 
-      <button class="admin-add-btn" onclick="addNewMovieFromDash()">Add Movie</button>
-      <div id="statusMsg" class="status-success">✔ Movie Added Successfully!</div>
+      <div class="admin-container">
+        <h3>📝 Manage Uploaded Movies</h3>
+        <div id="adminMoviesList" style="max-height: 350px; overflow-y: auto;">
+          </div>
+      </div>
     </div>
   </section>
 
@@ -199,23 +219,19 @@
   <footer>© 2026 CINEFLEX. All Rights Reserved.</footer>
 
   <script>
-    // 🔗 1. Movies 40+ Default ලිස්ට් එක ලෝඩ් කිරීම
+    // දැනට Edit කරමින් පවතින ෆිල්ම් එකේ Index එක සටහන් කරගැනීමට (-1 යනු Edit එකක් නොවන බවයි)
+    let currentEditingIndex = -1;
+
+    // 🔗 1. සයිට් එකේ Movies ප්‍රධාන Grid එක ලෝඩ් කිරීම
     function loadMainMovies() {
         const defaultMovies = [
             { title: "Dune: Part Two", genre: "Sci-Fi | Action", img: "https://images.unsplash.com/photo-1534447677768-be436bb09401?q=80&w=400", link: "#", download: "#" },
             { title: "Deadpool & Wolverine", genre: "Action | Comedy", img: "https://images.unsplash.com/photo-1635805737707-575885ab0820?q=80&w=400", link: "#", download: "#" },
-            { title: "Inside Out 2", genre: "Animation | Family", img: "https://images.unsplash.com/photo-1608889174637-3c44f6326f20?q=80&w=400", link: "#", download: "#" },
-            { title: "Oppenheimer", genre: "Biography | Drama", img: "https://images.unsplash.com/photo-1440404653325-ab127d49abc1?q=80&w=400", link: "#", download: "#" },
-            { title: "Avatar: The Way of Water", genre: "Sci-Fi | Adventure", img: "https://images.unsplash.com/photo-1518709268805-4e9042af9f23?q=80&w=400", link: "https://www.w3schools.com/html/mov_bbb.mp4", download: "#" },
-            { title: "Interstellar", genre: "Sci-Fi | Mystery", img: "https://images.unsplash.com/photo-1451187580459-43490279c0fa?q=80&w=400", link: "https://www.w3schools.com/html/movie.mp4", download: "#" },
-            { title: "The Dark Knight", genre: "Action | Crime", img: "https://images.unsplash.com/photo-1478760329108-5c3ed9d495a0?q=80&w=400", link: "#", download: "#" },
-            { title: "Inception", genre: "Sci-Fi | Action", img: "https://images.unsplash.com/photo-1509198397868-475647b2a1e5?q=80&w=400", link: "#", download: "#" },
-            { title: "John Wick: Chapter 4", genre: "Action | Thriller", img: "https://images.unsplash.com/photo-1594909122845-11baa439b7bf?q=80&w=400", link: "#", download: "#" },
-            { title: "Barbie", genre: "Comedy | Fantasy", img: "https://images.unsplash.com/photo-1559583985-c80d8ad9b29f?q=80&w=400", link: "#", download: "#" }
+            { title: "Inside Out 2", genre: "Animation | Family", img: "https://images.unsplash.com/photo-1608889174637-3c44f6326f20?q=80&w=400", link: "#", download: "#" }
         ];
 
         const localMovies = JSON.parse(localStorage.getItem('movies')) || [];
-        const allMovies = [...localMovies, ...defaultMovies]; // ඇඩ්මින් දාන ඒවා මුලටම එනවා
+        const allMovies = [...localMovies, ...defaultMovies];
 
         const grid = document.getElementById('mainMoviesGrid');
         grid.innerHTML = '';
@@ -224,7 +240,6 @@
             const movieLink = m.link ? m.link : '#';
             let downloadButtonHTML = '';
             
-            // Download ලින්ක් එකක් තිබේ නම් පමණක් බටන් එක හැදේ
             if (m.download && m.download !== '#' && m.download !== '') {
                 downloadButtonHTML = `<a href="${m.download}" target="_blank" class="download-btn-inline">Download</a>`;
             } else {
@@ -249,7 +264,7 @@
         });
     }
 
-    // 🔒 2. Auth Status සහ Admin Dashboard එක සක්‍රිය කිරීම
+    // 🔒 2. Auth Status සහ Admin පැනලය පාලනය
     function checkAuthStatus() {
         const loggedInUser = JSON.parse(localStorage.getItem('loggedInUser'));
         const authStatusContainer = document.getElementById('authStatus');
@@ -258,8 +273,9 @@
 
         if(loggedInUser) {
             if(loggedInUser.role === 'admin') {
-                adminSection.style.display = 'block'; // ඇඩ්මින් සෙක්ෂන් එක පෙන්වයි
-                dashMenuLink.style.display = 'inline-block'; // මෙනූ එකේ ඩෑෂ්බෝඩ් ලින්ක් එක පෙන්වයි
+                adminSection.style.display = 'block';
+                dashMenuLink.style.display = 'inline-block';
+                renderAdminMovieList(); // ඇඩ්මින් ලිස්ට් එක ලෝඩ් කිරීම
             }
             authStatusContainer.innerHTML = `
                 <span class="user-tag">👋 ${loggedInUser.name}</span>
@@ -271,8 +287,61 @@
         }
     }
 
-    // 💾 3. එකම පේජ් එකේ ඩෑෂ්බෝඩ් එකෙන් Movies සේව් කිරීමේ Function එක
-    function addNewMovieFromDash() {
+    // 📝 3. ඇඩ්මින් පැනලයේ තියෙන වෙනස්කම් කරන ලිස්ට් එක හැදීම
+    function renderAdminMovieList() {
+        const localMovies = JSON.parse(localStorage.getItem('movies')) || [];
+        const container = document.getElementById('adminMoviesList');
+        
+        if(localMovies.length === 0) {
+            container.innerHTML = '<p style="color:#6e7282; font-size:0.95rem;">No uploaded movies yet.</p>';
+            return;
+        }
+
+        let tableHTML = `<table class="manage-table">`;
+        localMovies.forEach((movie, index) => {
+            tableHTML += `
+                <tr>
+                    <td>
+                        <span style="font-weight:600; display:block;">${movie.title}</span>
+                        <span style="font-size:0.8rem; color:#8c8ca1;">${movie.genre}</span>
+                    </td>
+                    <td>
+                        <div class="action-btns">
+                            <button class="edit-inline-btn" onclick="startEditMovie(${index})">Edit</button>
+                            <button class="delete-inline-btn" onclick="deleteMovie(${index})">Delete</button>
+                        </div>
+                    </td>
+                </tr>
+            `;
+        });
+        tableHTML += `</table>`;
+        container.innerHTML = tableHTML;
+    }
+
+    // ✍ 4. ෆිල්ම් එකක් Edit කරන්න දත්ත Form එකට ගැනීම
+    function startEditMovie(index) {
+        const localMovies = JSON.parse(localStorage.getItem('movies')) || [];
+        const movie = localMovies[index];
+
+        // Form එකට දත්ත පුරවයි
+        document.getElementById('movieTitle').value = movie.title;
+        document.getElementById('movieGenre').value = movie.genre;
+        document.getElementById('movieImg').value = movie.img;
+        document.getElementById('movieLink').value = movie.link;
+        document.getElementById('movieDownload').value = movie.download && movie.download !== '#' ? movie.download : '';
+
+        // Form එක Edit Mode එකට වෙනස් කරයි
+        currentEditingIndex = index;
+        document.getElementById('formTitle').innerText = "✍ Edit Movie Content";
+        document.getElementById('submitFormBtn').innerText = "Update Movie";
+        document.getElementById('submitFormBtn').style.background = "linear-gradient(90deg, #00ff77, #0077ff)";
+
+        // සුමටව Form එක තියෙන තැනට Scroll කරයි
+        window.scrollTo({ top: document.getElementById('adminSection').offsetTop - 80, behavior: 'smooth' });
+    }
+
+    // 💾 5. Add හෝ Update සේව් කරන ප්‍රධාන Function එක
+    function saveMovieFromDash() {
         const title = document.getElementById('movieTitle').value.trim();
         const genre = document.getElementById('movieGenre').value.trim();
         const img = document.getElementById('movieImg').value.trim();
@@ -284,7 +353,7 @@
             return;
         }
 
-        const newMovieObj = {
+        const movieObj = {
             title: title,
             genre: genre,
             img: img ? img : "https://images.unsplash.com/photo-1489599849927-2ee91cede3ba?q=80&w=400",
@@ -292,14 +361,29 @@
             download: download ? download : "#"
         };
 
-        const currentMovies = JSON.parse(localStorage.getItem('movies')) || [];
-        currentMovies.unshift(newMovieObj); // අලුත් එක ලිස්ට් එකේ මුලටම දානවා
-        localStorage.setItem('movies', JSON.stringify(currentMovies));
+        let localMovies = JSON.parse(localStorage.getItem('movies')) || [];
 
-        // ලිස්ට් එක ක්ෂණිකව අප්ඩේට් කිරීම
+        if (currentEditingIndex === -1) {
+            // නව චිත්‍රපටයක් එකතු කිරීම (Add)
+            localMovies.unshift(movieObj);
+        } else {
+            // දැනට පවතින චිත්‍රපටයක් යාවත්කාලීන කිරීම (Update)
+            localMovies[currentEditingIndex] = movieObj;
+            
+            // නැවත සාමාන්‍ය තත්වයට පත් කිරීම
+            currentEditingIndex = -1;
+            document.getElementById('formTitle').innerText = "Add New Movie";
+            document.getElementById('submitFormBtn').innerText = "Add Movie";
+            document.getElementById('submitFormBtn').style.background = "#0077ff";
+        }
+
+        localStorage.setItem('movies', JSON.stringify(localMovies));
+
+        // සියල්ල Update කර පෙන්වීම
         loadMainMovies();
+        renderAdminMovieList();
 
-        // Inputs හිස් කිරීම
+        // Form එක හිස් කිරීම
         document.getElementById('movieTitle').value = '';
         document.getElementById('movieGenre').value = '';
         document.getElementById('movieImg').value = '';
@@ -309,6 +393,18 @@
         const statusMsg = document.getElementById('statusMsg');
         statusMsg.style.display = 'block';
         setTimeout(() => { statusMsg.style.display = 'none'; }, 3000);
+    }
+
+    // ❌ 6. ෆිල්ම් එකක් සම්පූර්ණයෙන්ම Delete කර දැමීම
+    function deleteMovie(index) {
+        if(confirm("Are you sure you want to delete this movie?")) {
+            let localMovies = JSON.parse(localStorage.getItem('movies')) || [];
+            localMovies.splice(index, 1);
+            localStorage.setItem('movies', JSON.stringify(localMovies));
+            
+            loadMainMovies();
+            renderAdminMovieList();
+        }
     }
 
     function logout() {
@@ -350,7 +446,6 @@
     revealElements.forEach(el => { el.style.opacity = '0'; el.style.transform = 'translateY(40px)'; });
     window.addEventListener('scroll', revealOnScroll);
     
-    // ආරම්භයේදී ක්‍රියාත්මක වන දේවල්
     loadMainMovies();
     checkAuthStatus();
     setTimeout(revealOnScroll, 300); 
