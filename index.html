@@ -13,19 +13,18 @@
     body{ background:#050816; color:#fff; overflow-x:hidden; }
     body::before{ content:''; position:fixed; width:500px; height:500px; background:rgba(0,123,255,0.25); filter:blur(120px); top:-100px; left:-100px; z-index:-1; }
     body::after{ content:''; position:fixed; width:500px; height:500px; background:rgba(255,0,76,0.22); filter:blur(120px); bottom:-150px; right:-100px; z-index:-1; }
+    
     header{ position:fixed; width:100%; top:0; left:0; display:flex; justify-content:space-between; align-items:center; padding:18px 7%; backdrop-filter:blur(15px); background:rgba(10,10,25,0.45); border-bottom:1px solid rgba(255,255,255,0.08); z-index:1000; }
     .logo{ display:flex; align-items:center; gap:12px; font-size:1.8rem; font-weight:800; letter-spacing:1px; background:linear-gradient(90deg,#2ea0ff,#ff004f); -webkit-background-clip:text; -webkit-text-fill-color:transparent; }
     .logo-icon{ width:48px; height:48px; border-radius:14px; background:linear-gradient(135deg,#008cff,#ff004f); display:flex; justify-content:center; align-items:center; color:#fff; font-size:1.4rem; box-shadow:0 0 30px rgba(0,140,255,0.5); }
     
-    /* 📱 Navigation Menu Styles */
+    /* 🌐 Desktop Links & Navigation */
+    nav { display: flex; align-items: center; }
     nav a{ color:#fff; text-decoration:none; margin-left:28px; font-weight:500; transition:0.3s; position:relative; }
     nav a:hover{ color:#2ea0ff; }
-    .user-tag { background: rgba(0, 119, 255, 0.2); padding: 5px 12px; border-radius: 20px; border: 1px solid #0077ff; color: #2ea0ff; margin-left: 15px; display: inline-block; }
+    .user-tag { background: rgba(0, 119, 255, 0.2); padding: 5px 12px; border-radius: 20px; border: 1px solid #0077ff; color: #2ea0ff; margin-left: 15px; }
     .logout-link { color: #ff004f !important; cursor: pointer; margin-left: 15px; }
     
-    /* Mobile Menu Toggle Button (Hamburger) */
-    .menu-toggle { display: none; font-size: 1.8rem; color: #fff; cursor: pointer; background: none; border: none; }
-
     .hero{ min-height:100vh; display:flex; align-items:center; justify-content:space-between; padding:140px 7% 70px; gap:50px; }
     .hero-text{ flex:1; animation:fadeIn 1s ease; }
     .hero-text h1{ font-size:4rem; line-height:1.1; margin-bottom:20px; }
@@ -106,33 +105,21 @@
     @keyframes float{ 0%{transform:translateY(0px);} 50%{transform:translateY(-15px);} 100%{transform:translateY(0px);} }
     @keyframes fadeIn{ from{opacity:0; transform:translateY(30px);} to{opacity:1; transform:translateY(0);} }
     
-    /* 📱 Responsive Mobile Media Query */
+    /* 📱 Responsive Mobile View Settings */
     @media(max-width:900px){ 
-      .hero{ flex-direction:column; text-align:center; padding-top: 100px; gap: 30px; } 
-      .hero-text h1{ font-size:2.6rem; } 
-      .hero-card { width: 100%; }
-      .movie-actions-group { flex-direction: column; } 
+      header { padding: 12px 5%; }
+      .logo { font-size: 1.4rem; }
+      .logo-icon { width: 38px; height: 38px; font-size: 1.1rem; border-radius: 10px; }
       
-      /* ෆෝන් එකට ගැලපෙන්න මෙනු එක වෙනස් කිරීම */
-      .menu-toggle { display: block; }
-      nav { 
-        display: none; 
-        flex-direction: column; 
-        position: absolute; 
-        top: 100%; 
-        left: 0; 
-        width: 100%; 
-        background: rgba(10, 10, 25, 0.95); 
-        backdrop-filter: blur(20px);
-        border-bottom: 1px solid rgba(255,255,255,0.1);
-        padding: 20px 0;
-        text-align: center;
-        gap: 15px;
-      }
-      nav.active { display: flex; }
-      nav a { margin-left: 0; font-size: 1.1rem; display: block; padding: 10px 0; }
-      .user-tag { margin-left: 0; margin-bottom: 10px; }
-      .logout-link { margin-left: 0 !important; }
+      /* ෆෝන් එකේදී ලින්ක් ටික සිරස්ව එක පෙළට ලස්සනට පෙන්වීමට */
+      nav { display: flex; flex-wrap: wrap; justify-content: center; gap: 10px; margin-top: 5px; }
+      nav a { font-size: 0.85rem; margin-left: 12px; }
+      .user-tag { margin-left: 8px; padding: 3px 8px; font-size: 0.8rem; }
+      .logout-link { margin-left: 8px; font-size: 0.8rem; }
+      
+      .hero{ flex-direction:column; text-align:center; padding: 120px 5% 40px; gap:40px; } 
+      .hero-text h1{ font-size:2.6rem; } 
+      .movie-actions-group { flex-direction: column; } 
     }
   </style>
 </head>
@@ -143,15 +130,13 @@
       <div class="logo-icon">▶</div>CINEFLEX
     </div>
 
-    <button class="menu-toggle" onclick="toggleMobileMenu()">☰</button>
-
     <nav id="navbarLinks">
-      <a href="#home" onclick="closeMobileMenu()">Home</a>
-      <a href="#features" onclick="closeMobileMenu()">Features</a>
-      <a href="#movies" onclick="closeMobileMenu()">Movies</a>
-      <a href="#adminSection" id="dashMenuLink" style="display:none; color:#0077ff; font-weight:600;" onclick="closeMobileMenu()">Dashboard</a>
-      <a href="#upload" onclick="closeMobileMenu()">Upload</a>
-      <a href="#contact" onclick="closeMobileMenu()">Contact</a>
+      <a href="#home">Home</a>
+      <a href="#features">Features</a>
+      <a href="#movies">Movies</a>
+      <a href="#adminSection" id="dashMenuLink" style="display:none; color:#0077ff; font-weight:600;">Dashboard</a>
+      <a href="#upload">Upload</a>
+      <a href="#contact">Contact</a>
       
       <span id="authStatus">
         <a href="login.html">Login</a>
@@ -253,75 +238,31 @@
 
   <footer>© 2026 CINEFLEX. All Rights Reserved.</footer>
 
-  <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-app.js"></script>
-  <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-database.js"></script>
-
   <script>
-    // ⚙️ 1. FIREBASE CONFIGURATION (මෙතනට ඔයාගේ Firebase Keys දාන්න)
-    const firebaseConfig = {
-      apiKey: "YOUR_FIREBASE_API_KEY",
-      authDomain: "YOUR_FIREBASE_AUTH_DOMAIN",
-      databaseURL: "YOUR_FIREBASE_DATABASE_URL",
-      projectId: "YOUR_FIREBASE_PROJECT_ID",
-      storageBucket: "YOUR_FIREBASE_STORAGE_BUCKET",
-      messagingSenderId: "YOUR_FIREBASE_MESSAGING_SENDER_ID",
-      appId: "YOUR_FIREBASE_APP_ID"
-    };
-    
-    // Firebase Initialize කිරීම
-    firebase.initializeApp(firebaseConfig);
-    const database = firebase.database();
+    let currentEditingIndex = -1;
 
-    let currentEditingKey = null; 
-    let globalMoviesArray = []; 
+    // 🎬 1. Local Storage Setup
+    function initializeMovies() {
+        const defaultMovies = [
+            { title: "Man vs Baby", genre: "Comedy/Family", img: "https://images.unsplash.com/photo-1608889174637-3c44f6326f20?q=80&w=400", link: "#", download: "#" },
+            { title: "Cyber Future", genre: "Action • Sci‑Fi", img: "https://images.unsplash.com/photo-1534447677768-be436bb09401?q=80&w=400", link: "#", download: "#" },
+            { title: "Shadow World", genre: "Thriller • Mystery", img: "https://images.unsplash.com/photo-1478760329108-5c3ed9d495a0?q=80&w=400", link: "#", download: "#" },
+            { title: "Dream Escape", genre: "Adventure • Fantasy", img: "https://images.unsplash.com/photo-1509198397868-475647b2a1e5?q=80&w=400", link: "#", download: "#" },
+            { title: "Last Horizon", genre: "Sci-Fi | Action", img: "https://images.unsplash.com/photo-1451187580459-43490279c0fa?q=80&w=400", link: "#", download: "#" }
+        ];
 
-    // 📱 Mobile Menu පාලනය කරන සරල Functions
-    function toggleMobileMenu() {
-        document.getElementById('navbarLinks').classList.toggle('active');
-    }
-    function closeMobileMenu() {
-        document.getElementById('navbarLinks').classList.remove('active');
+        if (!localStorage.getItem('movies')) {
+            localStorage.setItem('movies', JSON.stringify(defaultMovies));
+        }
     }
 
-    // 🎬 2. Database එකෙන් දත්ත සජීවීව කියවීම
-    function listenToMovies() {
-        const moviesRef = database.ref('movies');
-        
-        moviesRef.on('value', (snapshot) => {
-            const data = snapshot.val();
-            globalMoviesArray = [];
-            
-            if (data) {
-                Object.keys(data).forEach(key => {
-                    globalMoviesArray.push({ firebaseKey: key, ...data[key] });
-                });
-            } else {
-                const defaultMovies = [
-                    { title: "Man vs Baby", genre: "Comedy/Family", img: "https://images.unsplash.com/photo-1608889174637-3c44f6326f20?q=80&w=400", link: "#", download: "#" },
-                    { title: "Cyber Future", genre: "Action • Sci‑Fi", img: "https://images.unsplash.com/photo-1534447677768-be436bb09401?q=80&w=400", link: "#", download: "#" },
-                    { title: "Shadow World", genre: "Thriller • Mystery", img: "https://images.unsplash.com/photo-1478760329108-5c3ed9d495a0?q=80&w=400", link: "#", download: "#" },
-                    { title: "Dream Escape", genre: "Adventure • Fantasy", img: "https://images.unsplash.com/photo-1509198397868-475647b2a1e5?q=80&w=400", link: "#", download: "#" },
-                    { title: "Last Horizon", genre: "Sci-Fi | Action", img: "https://images.unsplash.com/photo-1451187580459-43490279c0fa?q=80&w=400", link: "#", download: "#" }
-                ];
-                
-                defaultMovies.forEach(movie => {
-                    moviesRef.push(movie);
-                });
-                return;
-            }
-
-            renderMainMovies(globalMoviesArray);
-            renderAdminMovieList(globalMoviesArray);
-        });
-    }
-
-    // 🔗 3. Movies ප්‍රධාන Grid එක පෙන්වීම
-    function renderMainMovies(movies) {
+    // 🔗 2. Load Movies
+    function loadMainMovies() {
+        const allMovies = JSON.parse(localStorage.getItem('movies')) || [];
         const grid = document.getElementById('mainMoviesGrid');
         grid.innerHTML = '';
-        const displayList = [...movies].reverse();
-
-        displayList.forEach(m => {
+        
+        allMovies.forEach(m => {
             const movieLink = m.link ? m.link : '#';
             let downloadButtonHTML = '';
             
@@ -349,7 +290,7 @@
         });
     }
 
-    // 🔒 4. User Login තත්ත්වය පාලනය
+    // 🔒 3. Auth Status Control
     function checkAuthStatus() {
         const loggedInUser = JSON.parse(localStorage.getItem('loggedInUser'));
         const authStatusContainer = document.getElementById('authStatus');
@@ -360,6 +301,7 @@
             if(loggedInUser.role === 'admin') {
                 adminSection.style.display = 'block';
                 dashMenuLink.style.display = 'inline-block';
+                renderAdminMovieList(); 
             }
             authStatusContainer.innerHTML = `
                 <span class="user-tag">👋 ${loggedInUser.name}</span>
@@ -371,18 +313,18 @@
         }
     }
 
-    // 📝 5. Admin Panel List එක
-    function renderAdminMovieList(movies) {
+    // 📝 4. Admin Movie List
+    function renderAdminMovieList() {
+        const allMovies = JSON.parse(localStorage.getItem('movies')) || [];
         const container = document.getElementById('adminMoviesList');
-        if(movies.length === 0) {
+        
+        if(allMovies.length === 0) {
             container.innerHTML = '<p style="color:#6e7282; font-size:0.95rem;">No movies available.</p>';
             return;
         }
 
-        const displayList = [...movies].reverse();
         let tableHTML = `<table class="manage-table">`;
-        
-        displayList.forEach(movie => {
+        allMovies.forEach((movie, index) => {
             tableHTML += `
                 <tr>
                     <td>
@@ -391,8 +333,8 @@
                     </td>
                     <td>
                         <div class="action-btns">
-                            <button class="edit-inline-btn" onclick="startEditMovie('${movie.firebaseKey}')">Edit</button>
-                            <button class="delete-inline-btn" onclick="deleteMovie('${movie.firebaseKey}')">Delete</button>
+                            <button class="edit-inline-btn" onclick="startEditMovie(${index})">Edit</button>
+                            <button class="delete-inline-btn" onclick="deleteMovie(${index})">Delete</button>
                         </div>
                     </td>
                 </tr>
@@ -402,10 +344,10 @@
         container.innerHTML = tableHTML;
     }
 
-    // ✍ 6. Edit කිරීමට Form එකට දත්ත ගැනීම
-    function startEditMovie(firebaseKey) {
-        const movie = globalMoviesArray.find(m => m.firebaseKey === firebaseKey);
-        if(!movie) return;
+    // ✍ 5. Edit Movie Setup
+    function startEditMovie(index) {
+        const allMovies = JSON.parse(localStorage.getItem('movies')) || [];
+        const movie = allMovies[index];
 
         document.getElementById('movieTitle').value = movie.title;
         document.getElementById('movieGenre').value = movie.genre;
@@ -413,7 +355,7 @@
         document.getElementById('movieLink').value = movie.link && movie.link !== '#' ? movie.link : '';
         document.getElementById('movieDownload').value = movie.download && movie.download !== '#' ? movie.download : '';
 
-        currentEditingKey = firebaseKey;
+        currentEditingIndex = index;
         document.getElementById('formTitle').innerText = "✍ Edit Movie Content";
         document.getElementById('submitFormBtn').innerText = "Update Movie";
         document.getElementById('submitFormBtn').style.background = "linear-gradient(90deg, #00ff77, #0077ff)";
@@ -421,7 +363,7 @@
         window.scrollTo({ top: document.getElementById('adminSection').offsetTop - 80, behavior: 'smooth' });
     }
 
-    // 💾 7. Firebase එකට Save/Update කිරීම
+    // 💾 6. Save or Update Movie
     function saveMovieFromDash() {
         const title = document.getElementById('movieTitle').value.trim();
         const genre = document.getElementById('movieGenre').value.trim();
@@ -442,15 +384,23 @@
             download: download ? download : "#"
         };
 
-        if (currentEditingKey === null) {
-            database.ref('movies').push(movieObj);
+        let allMovies = JSON.parse(localStorage.getItem('movies')) || [];
+
+        if (currentEditingIndex === -1) {
+            allMovies.unshift(movieObj);
         } else {
-            database.ref('movies/' + currentEditingKey).set(movieObj);
-            currentEditingKey = null;
+            allMovies[currentEditingIndex] = movieObj;
+            
+            currentEditingIndex = -1;
             document.getElementById('formTitle').innerText = "Add New Movie";
             document.getElementById('submitFormBtn').innerText = "Add Movie";
             document.getElementById('submitFormBtn').style.background = "#0077ff";
         }
+
+        localStorage.setItem('movies', JSON.stringify(allMovies));
+
+        loadMainMovies();
+        renderAdminMovieList();
 
         document.getElementById('movieTitle').value = '';
         document.getElementById('movieGenre').value = '';
@@ -463,10 +413,15 @@
         setTimeout(() => { statusMsg.style.display = 'none'; }, 3000);
     }
 
-    // ❌ 8. Delete කිරීම
-    function deleteMovie(firebaseKey) {
+    // ❌ 7. Delete Movie
+    function deleteMovie(index) {
         if(confirm("Are you sure you want to delete this movie?")) {
-            database.ref('movies/' + firebaseKey).remove();
+            let allMovies = JSON.parse(localStorage.getItem('movies')) || [];
+            allMovies.splice(index, 1);
+            localStorage.setItem('movies', JSON.stringify(allMovies));
+            
+            loadMainMovies();
+            renderAdminMovieList();
         }
     }
 
@@ -475,7 +430,7 @@
         window.location.reload();
     }
 
-    // Upload Preview System
+    // Video Upload Preview
     const uploadInput = document.getElementById('movieUpload');
     const previewContainer = document.getElementById('previewContainer');
 
@@ -509,8 +464,9 @@
     revealElements.forEach(el => { el.style.opacity = '0'; el.style.transform = 'translateY(40px)'; });
     window.addEventListener('scroll', revealOnScroll);
     
-    // ආරම්භ කිරීම
-    listenToMovies();
+    // Run Init
+    initializeMovies();
+    loadMainMovies();
     checkAuthStatus();
     setTimeout(revealOnScroll, 300); 
   </script>
