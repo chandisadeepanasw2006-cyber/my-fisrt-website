@@ -3,113 +3,303 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>CINEFLEX | Admin Dashboard</title>
+  <title>CINEFLEX | Ultimate Streaming Experience</title>
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
 
   <style>
-    * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Poppins', sans-serif; }
-    body { background: #050816; color: #fff; min-height: 100vh; padding: 40px 7%; position: relative; overflow-x: hidden; }
-    body::before { content: ''; position: fixed; width: 500px; height: 500px; background: rgba(0, 123, 255, 0.15); filter: blur(120px); top: -100px; left: -100px; z-index: -1; }
+    *{ margin:0; padding:0; box-sizing:border-box; scroll-behavior:smooth; font-family:'Poppins',sans-serif; }
+    body{ background:#050816; color:#fff; overflow-x:hidden; }
+    body::before{ content:''; position:fixed; width:500px; height:500px; background:rgba(0,123,255,0.25); filter:blur(120px); top:-100px; left:-100px; z-index:-1; }
+    body::after{ content:''; position:fixed; width:500px; height:500px; background:rgba(255,0,76,0.22); filter:blur(120px); bottom:-150px; right:-100px; z-index:-1; }
+    header{ position:fixed; width:100%; top:0; left:0; display:flex; justify-content:space-between; align-items:center; padding:18px 7%; backdrop-filter:blur(15px); background:rgba(10,10,25,0.45); border-bottom:1px solid rgba(255,255,255,0.08); z-index:1000; }
+    .logo{ display:flex; align-items:center; gap:12px; font-size:1.8rem; font-weight:800; letter-spacing:1px; background:linear-gradient(90deg,#2ea0ff,#ff004f); -webkit-background-clip:text; -webkit-text-fill-color:transparent; }
+    .logo-icon{ width:48px; height:48px; border-radius:14px; background:linear-gradient(135deg,#008cff,#ff004f); display:flex; justify-content:center; align-items:center; color:#fff; font-size:1.4rem; box-shadow:0 0 30px rgba(0,140,255,0.5); }
+    nav a{ color:#fff; text-decoration:none; margin-left:28px; font-weight:500; transition:0.3s; position:relative; }
+    nav a:hover{ color:#2ea0ff; }
+    .user-tag { background: rgba(0, 119, 255, 0.2); padding: 5px 12px; border-radius: 20px; border: 1px solid #0077ff; color: #2ea0ff; margin-left: 15px; }
+    .logout-link { color: #ff004f !important; cursor: pointer; margin-left: 15px; }
     
-    .header-area { display: flex; justify-content: space-between; align-items: center; margin-bottom: 40px; border-bottom: 1px solid rgba(255, 255, 255, 0.08); padding-bottom: 20px; }
-    .logo { display: flex; align-items: center; gap: 12px; font-size: 1.8rem; font-weight: 800; letter-spacing: 1px; }
-    .logo span { background: linear-gradient(90deg, #2ea0ff, #ff004f); -webkit-background-clip: text; -webkit-text-fill-color: transparent; }
-    .back-btn { color: #8c8ca1; text-decoration: none; font-weight: 500; transition: 0.3s; display: flex; align-items: center; gap: 8px; }
-    .back-btn:hover { color: #2ea0ff; }
-
-    .dashboard-container { max-width: 600px; margin: 0 auto; background: rgba(255, 255, 255, 0.04); border: 1px solid rgba(255, 255, 255, 0.08); border-radius: 24px; padding: 40px; backdrop-filter: blur(15px); box-shadow: 0 20px 40px rgba(0, 0, 0, 0.45); }
-    .dashboard-container h2 { font-size: 1.8rem; font-weight: 700; margin-bottom: 25px; letter-spacing: 0.5px; }
+    .hero{ min-height:100vh; display:flex; align-items:center; justify-content:space-between; padding:140px 7% 70px; gap:50px; }
+    .hero-text{ flex:1; animation:fadeIn 1s ease; }
+    .hero-text h1{ font-size:4rem; line-height:1.1; margin-bottom:20px; }
+    .hero-text h1 span{ background:linear-gradient(90deg,#2ea0ff,#ff004f); -webkit-background-clip:text; -webkit-text-fill-color:transparent; }
+    .hero-text p{ color:#c7c7d6; font-size:1.05rem; line-height:1.8; margin-bottom:30px; max-width:650px; }
+    .btns{ display:flex; gap:18px; flex-wrap:wrap; }
+    .btn{ padding:14px 28px; border:none; border-radius:14px; cursor:pointer; font-size:1rem; font-weight:600; transition:0.4s; text-decoration:none; display:inline-flex; align-items:center; gap:10px; }
+    .primary{ background:linear-gradient(90deg,#0077ff,#ff004f); color:#fff; box-shadow:0 10px 25px rgba(0,119,255,0.35); }
+    .primary:hover{ transform:translateY(-4px) scale(1.02); }
+    .secondary{ border:1px solid rgba(255,255,255,0.15); background:rgba(255,255,255,0.04); color:#fff; }
+    .secondary:hover{ background:rgba(255,255,255,0.08); }
     
+    .hero-card{ flex:1; display:flex; justify-content:center; animation:float 4s ease-in-out infinite; }
+    .card{ width:100%; max-width:480px; background:rgba(255,255,255,0.06); border:1px solid rgba(255,255,255,0.08); border-radius:28px; overflow:hidden; backdrop-filter:blur(15px); box-shadow:0 20px 40px rgba(0,0,0,0.45); }
+    .card img{ width:100%; height:280px; object-fit:cover; }
+    .card-content{ padding:24px; }
+    .card-content h2{ margin-bottom:10px; }
+    .card-content p{ color:#c5c5d4; line-height:1.7; margin-bottom:20px; }
+    
+    section{ padding:90px 7%; }
+    .section-title{ text-align:center; font-size:2.7rem; margin-bottom:55px; font-weight:800; }
+    .section-title span{ background:linear-gradient(90deg,#2ea0ff,#ff004f); -webkit-background-clip:text; -webkit-text-fill-color:transparent; }
+    
+    /* ⚡ Admin Dashboard Sections Style (From your Screenshot) */
+    .admin-container { max-width: 600px; margin: 0 auto; background: rgba(255, 255, 255, 0.04); border: 1px solid rgba(255, 255, 255, 0.08); border-radius: 24px; padding: 40px; backdrop-filter: blur(15px); box-shadow: 0 20px 40px rgba(0, 0, 0, 0.45); }
+    .admin-container h3 { font-size: 1.8rem; font-weight: 700; margin-bottom: 25px; letter-spacing: 0.5px; text-align: left; }
     .input-group { margin-bottom: 20px; }
     .input-group input { width: 100%; padding: 16px 20px; background: rgba(10, 14, 30, 0.6); border: 1px solid rgba(255, 255, 255, 0.1); border-radius: 14px; color: #fff; font-size: 0.95rem; transition: 0.3s; }
     .input-group input:focus { outline: none; border-color: #0077ff; box-shadow: 0 0 15px rgba(0, 119, 255, 0.2); }
     .input-group input::placeholder { color: #4e5264; }
+    .admin-add-btn { width: 100%; padding: 16px; border: none; border-radius: 14px; background: #0077ff; color: #fff; font-size: 1rem; font-weight: 600; cursor: pointer; transition: 0.3s; box-shadow: 0 4px 15px rgba(0, 119, 255, 0.3); }
+    .admin-add-btn:hover { background: #0062d1; transform: translateY(-2px); }
+    .status-success { color: #00ff77; text-align: center; margin-top: 15px; font-size: 0.9rem; display: none; }
 
-    .add-btn { width: 100%; padding: 16px; border: none; border-radius: 14px; background: #0077ff; color: #fff; font-size: 1rem; font-weight: 600; cursor: pointer; transition: 0.3s; box-shadow: 0 4px 15px rgba(0, 119, 255, 0.3); }
-    .add-btn:hover { background: #0062d1; transform: translateY(-2px); }
-    .add-btn:active { transform: translateY(0); }
+    .features{ display:grid; grid-template-columns:repeat(auto-fit,minmax(250px,1fr)); gap:25px; }
+    .feature-box{ background:rgba(255,255,255,0.05); border:1px solid rgba(255,255,255,0.08); border-radius:24px; padding:35px 25px; transition:0.4s; backdrop-filter:blur(12px); }
+    .feature-box:hover{ transform:translateY(-10px); border-color:#0077ff; box-shadow:0 15px 40px rgba(0,119,255,0.15); }
+    .feature-icon{ width:70px; height:70px; border-radius:18px; background:linear-gradient(135deg,#0077ff,#ff004f); display:flex; align-items:center; justify-content:center; font-size:1.7rem; margin-bottom:22px; }
+    .feature-box h3{ margin-bottom:14px; }
+    .feature-box p{ color:#c7c7d6; line-height:1.7; }
+    
+    .upload-area{ background:rgba(255,255,255,0.05); border:2px dashed rgba(255,255,255,0.15); border-radius:25px; padding:50px; text-align:center; backdrop-filter:blur(10px); }
+    .upload-area h3{ margin-bottom:15px; font-size:1.8rem; }
+    .upload-area p{ color:#c7c7d6; margin-bottom:25px; }
+    .upload-btn { display:inline-block; padding:15px 30px; border-radius:16px; background:linear-gradient(90deg,#0077ff,#ff004f); cursor:pointer; font-weight:600; transition:0.4s; }
+    input[type="file"]{ display:none; }
+    
+    .movies-grid{ display:grid; grid-template-columns:repeat(auto-fit,minmax(220px,1fr)); gap:25px; margin-top:45px; }
+    .movie-card{ background:rgba(255,255,255,0.05); border-radius:22px; overflow:hidden; border:1px solid rgba(255,255,255,0.07); transition:0.4s; backdrop-filter:blur(12px); display: flex; flex-direction: column; justify-content: space-between; }
+    .movie-card:hover{ transform:translateY(-10px); box-shadow:0 15px 35px rgba(255,0,76,0.18); }
+    .movie-card img{ width:100%; height:300px; object-fit:cover; }
+    .movie-info{ padding:18px; display: flex; flex-direction: column; flex-grow: 1; justify-content: space-between; }
+    .movie-info h4{ margin-bottom:5px; font-size: 1.1rem; }
+    .movie-info p{ color: #8c8ca1; font-size: 0.85rem; margin-bottom: 12px; }
+    
+    .movie-actions-group { display: flex; gap: 10px; margin-top: auto; }
+    .watch-btn{ flex: 1; padding:12px; border:none; border-radius:12px; background:linear-gradient(90deg,#0077ff,#ff004f); color:#fff; font-weight:600; cursor:pointer; text-align: center; text-decoration: none; display: block; transition: 0.3s; font-size: 0.9rem; }
+    .watch-btn:hover{ opacity: 0.9; transform: scale(1.02); }
+    .download-btn-inline { flex: 1; padding:12px; border:1px solid #ff004f; border-radius:12px; background: rgba(255, 0, 79, 0.1); color:#ff004f; font-weight:600; cursor:pointer; text-align: center; text-decoration: none; display: block; transition: 0.3s; font-size: 0.9rem; }
+    .download-btn-inline:hover { background: #ff004f; color: #fff; transform: scale(1.02); }
 
-    .msg { text-align: center; margin-top: 15px; font-size: 0.9rem; display: none; }
-    .success { color: #00ff77; }
+    .contact{ text-align:center; background:rgba(255,255,255,0.04); border:1px solid rgba(255,255,255,0.07); border-radius:30px; padding:55px 30px; backdrop-filter:blur(12px); }
+    .contact h2{ margin-bottom:20px; font-size:2.5rem; }
+    .contact p{ color:#c7c7d6; margin-bottom:15px; font-size:1.05rem; }
+    footer{ text-align:center; padding:30px; color:#8c8ca1; border-top:1px solid rgba(255,255,255,0.08); margin-top:60px; }
+    @keyframes float{ 0%{transform:translateY(0px);} 50%{transform:translateY(-15px);} 100%{transform:translateY(0px);} }
+    @keyframes fadeIn{ from{opacity:0; transform:translateY(30px);} to{opacity:1; transform:translateY(0);} }
+    @media(max-width:900px){ .hero{ flex-direction:column; text-align:center; } .hero-text h1{ font-size:3rem; } nav{ display:none; } .movie-actions-group { flex-direction: column; } }
   </style>
 </head>
 <body>
 
-  <div class="header-area">
-    <div class="logo">⚡ <span>CINEFLEX Admin Dashboard</span></div>
-    <a href="index.html" class="back-btn">← Back to Site</a>
-  </div>
-
-  <div class="dashboard-container">
-    <h2>Add New Movie</h2>
-    
-    <div class="input-group">
-      <input type="text" id="movieTitle" placeholder="Movie Title" required>
-    </div>
-    
-    <div class="input-group">
-      <input type="text" id="movieGenre" placeholder="Genre (e.g. Action • Sci-Fi)" required>
-    </div>
-    
-    <div class="input-group">
-      <input type="text" id="movieImg" placeholder="Image URL (Unsplash Link)">
+  <header>
+    <div class="logo">
+      <div class="logo-icon">▶</div>CINEFLEX
     </div>
 
-    <div class="input-group">
-      <input type="text" id="movieLink" placeholder="Watch / Stream URL (e.g. Video Link)">
+    <nav id="navbarLinks">
+      <a href="#home">Home</a>
+      <a href="#features">Features</a>
+      <a href="#movies">Movies</a>
+      <a href="#adminSection" id="dashMenuLink" style="display:none; color:#0077ff; font-weight:600;">Dashboard</a>
+      <a href="#upload">Upload</a>
+      <a href="#contact">Contact</a>
+      
+      <span id="authStatus">
+        <a href="login.html">Login</a>
+        <a href="signup.html">Signup</a>
+      </span>
+    </nav>
+  </header>
+
+  <section class="hero" id="home">
+    <div class="hero-text">
+      <h1>Unlimited Movies & TV Series With <span>CINEFLEX</span></h1>
+      <p>Experience a futuristic streaming platform with modern UI animations, smooth interactions, movie uploads, streaming support, and stylish design.</p>
+      <div class="btns">
+        <a href="#movies" class="btn primary">Explore Movies</a>
+        <a href="#upload" class="btn secondary">Upload Content</a>
+      </div>
     </div>
 
-    <div class="input-group">
-      <input type="text" id="movieDownload" placeholder="Direct Download URL (Optional)">
+    <div class="hero-card">
+      <div class="card">
+        <img src="https://images.unsplash.com/photo-1489599849927-2ee91cede3ba?q=80&w=1200" alt="Cinema">
+        <div class="card-content">
+          <h2>Next Generation Streaming</h2>
+          <p>Blue & red neon themed cinematic experience with elegant animations and premium design.</p>
+          <a href="#features" class="btn primary">Learn More</a>
+        </div>
+      </div>
     </div>
+  </section>
 
-    <button class="add-btn" onclick="addNewMovie()">Add Movie</button>
-    <div id="statusMsg" class="msg success">Movie Added Successfully!</div>
-  </div>
+  <section id="adminSection" style="display:none; padding-top: 120px;">
+    <h2 class="section-title">⚡ <span>CINEFLEX Admin Dashboard</span></h2>
+    <div class="admin-container">
+      <h3>Add New Movie</h3>
+      
+      <div class="input-group">
+        <input type="text" id="movieTitle" placeholder="Movie Title">
+      </div>
+      <div class="input-group">
+        <input type="text" id="movieGenre" placeholder="Genre (e.g. Action • Sci-Fi)">
+      </div>
+      <div class="input-group">
+        <input type="text" id="movieImg" placeholder="Image URL (Unsplash Link)">
+      </div>
+      <div class="input-group">
+        <input type="text" id="movieLink" placeholder="Watch / Stream URL">
+      </div>
+      <div class="input-group">
+        <input type="text" id="movieDownload" placeholder="Direct Download URL">
+      </div>
+
+      <button class="admin-add-btn" onclick="addNewMovieFromDash()">Add Movie</button>
+      <div id="statusMsg" class="status-success">✔ Movie Added Successfully!</div>
+    </div>
+  </section>
+
+  <section id="features">
+    <h2 class="section-title">Why Choose <span>CINEFLEX</span></h2>
+    <div class="features">
+      <div class="feature-box"><div class="feature-icon">🎬</div><h3>Movie Streaming</h3><p>Watch movies online with a smooth responsive cinematic interface.</p></div>
+      <div class="feature-box"><div class="feature-icon">⚡</div><h3>Fast Performance</h3><p>Optimized lightweight structure using pure HTML, CSS & JS.</p></div>
+      <div class="feature-box"><div class="feature-icon">📥</div><h3>Upload System</h3><p>Upload legally owned videos quickly with an elegant upload section.</p></div>
+      <div class="feature-box"><div class="feature-icon">✨</div><h3>Modern Animations</h3><p>Glassmorphism effects, gradients, hover transitions, and visuals.</p></div>
+    </div>
+  </section>
+
+  <section id="upload">
+    <h2 class="section-title">Upload Your <span>Content</span></h2>
+    <div class="upload-area">
+      <h3>Upload Movies or TV Series</h3>
+      <p>Select a video file to preview it instantly on your streaming website.</p>
+      <label for="movieUpload" class="upload-btn">Choose Video</label>
+      <input type="file" id="movieUpload" accept="video/*">
+      <div id="previewContainer" style="margin-top:35px;"></div>
+    </div>
+  </section>
+
+  <section id="movies">
+    <h2 class="section-title">Trending <span>Movies</span></h2>
+    <div class="movies-grid" id="mainMoviesGrid"></div>
+  </section>
+
+  <section id="contact">
+    <div class="contact">
+      <h2>Contact CINEFLEX</h2>
+      <p>Need a custom streaming platform or collaboration?</p>
+      <p><strong>Email:</strong> chandisadeepanasw2006@gmail.com</p>
+      <p><strong>Phone:</strong> +94 74 076 3802</p>
+    </div>
+  </section>
+
+  <footer>© 2026 CINEFLEX. All Rights Reserved.</footer>
 
   <script>
-    // 🔐 ආරක්ෂාව සඳහා ඇඩ්මින් කෙනෙක් ලොග් වෙලා ඉන්නවද කියලා පරික්ෂා කිරීම
-    window.onload = function() {
+    // 🔗 1. Movies 40+ Default ලිස්ට් එක ලෝඩ් කිරීම
+    function loadMainMovies() {
+        const defaultMovies = [
+            { title: "Dune: Part Two", genre: "Sci-Fi | Action", img: "https://images.unsplash.com/photo-1534447677768-be436bb09401?q=80&w=400", link: "#", download: "#" },
+            { title: "Deadpool & Wolverine", genre: "Action | Comedy", img: "https://images.unsplash.com/photo-1635805737707-575885ab0820?q=80&w=400", link: "#", download: "#" },
+            { title: "Inside Out 2", genre: "Animation | Family", img: "https://images.unsplash.com/photo-1608889174637-3c44f6326f20?q=80&w=400", link: "#", download: "#" },
+            { title: "Oppenheimer", genre: "Biography | Drama", img: "https://images.unsplash.com/photo-1440404653325-ab127d49abc1?q=80&w=400", link: "#", download: "#" },
+            { title: "Avatar: The Way of Water", genre: "Sci-Fi | Adventure", img: "https://images.unsplash.com/photo-1518709268805-4e9042af9f23?q=80&w=400", link: "https://www.w3schools.com/html/mov_bbb.mp4", download: "#" },
+            { title: "Interstellar", genre: "Sci-Fi | Mystery", img: "https://images.unsplash.com/photo-1451187580459-43490279c0fa?q=80&w=400", link: "https://www.w3schools.com/html/movie.mp4", download: "#" },
+            { title: "The Dark Knight", genre: "Action | Crime", img: "https://images.unsplash.com/photo-1478760329108-5c3ed9d495a0?q=80&w=400", link: "#", download: "#" },
+            { title: "Inception", genre: "Sci-Fi | Action", img: "https://images.unsplash.com/photo-1509198397868-475647b2a1e5?q=80&w=400", link: "#", download: "#" },
+            { title: "John Wick: Chapter 4", genre: "Action | Thriller", img: "https://images.unsplash.com/photo-1594909122845-11baa439b7bf?q=80&w=400", link: "#", download: "#" },
+            { title: "Barbie", genre: "Comedy | Fantasy", img: "https://images.unsplash.com/photo-1559583985-c80d8ad9b29f?q=80&w=400", link: "#", download: "#" }
+        ];
+
+        const localMovies = JSON.parse(localStorage.getItem('movies')) || [];
+        const allMovies = [...localMovies, ...defaultMovies]; // ඇඩ්මින් දාන ඒවා මුලටම එනවා
+
+        const grid = document.getElementById('mainMoviesGrid');
+        grid.innerHTML = '';
+        
+        allMovies.forEach(m => {
+            const movieLink = m.link ? m.link : '#';
+            let downloadButtonHTML = '';
+            
+            // Download ලින්ක් එකක් තිබේ නම් පමණක් බටන් එක හැදේ
+            if (m.download && m.download !== '#' && m.download !== '') {
+                downloadButtonHTML = `<a href="${m.download}" target="_blank" class="download-btn-inline">Download</a>`;
+            } else {
+                downloadButtonHTML = `<a href="${movieLink}" target="_blank" class="download-btn-inline">Download</a>`;
+            }
+
+            grid.innerHTML += `
+              <div class="movie-card">
+                <img src="${m.img}" alt="Poster" onerror="this.src='https://images.unsplash.com/photo-1489599849927-2ee91cede3ba?q=80&w=400'">
+                <div class="movie-info">
+                  <div>
+                    <h4>${m.title}</h4>
+                    <p>${m.genre}</p>
+                  </div>
+                  <div class="movie-actions-group">
+                    <a href="${movieLink}" target="_blank" class="watch-btn">Watch Now</a>
+                    ${downloadButtonHTML}
+                  </div>
+                </div>
+              </div>
+            `;
+        });
+    }
+
+    // 🔒 2. Auth Status සහ Admin Dashboard එක සක්‍රිය කිරීම
+    function checkAuthStatus() {
         const loggedInUser = JSON.parse(localStorage.getItem('loggedInUser'));
-        if (!loggedInUser || loggedInUser.role !== 'admin') {
-            alert("Access Denied! Admins only.");
-            window.location.href = "login.html"; // ඇඩ්මින් කෙනෙක් නොවේ නම් ලොගින් පිටුවට හරවා යවයි
+        const authStatusContainer = document.getElementById('authStatus');
+        const adminSection = document.getElementById('adminSection');
+        const dashMenuLink = document.getElementById('dashMenuLink');
+
+        if(loggedInUser) {
+            if(loggedInUser.role === 'admin') {
+                adminSection.style.display = 'block'; // ඇඩ්මින් සෙක්ෂන් එක පෙන්වයි
+                dashMenuLink.style.display = 'inline-block'; // මෙනූ එකේ ඩෑෂ්බෝඩ් ලින්ක් එක පෙන්වයි
+            }
+            authStatusContainer.innerHTML = `
+                <span class="user-tag">👋 ${loggedInUser.name}</span>
+                <a onclick="logout()" class="logout-link">Logout</a>
+            `;
+        } else {
+            adminSection.style.display = 'none';
+            dashMenuLink.style.display = 'none';
         }
     }
 
-    // 💾 චිත්‍රපටය LocalStorage එකට සේව් කරන Function එක
-    function addNewMovie() {
+    // 💾 3. එකම පේජ් එකේ ඩෑෂ්බෝඩ් එකෙන් Movies සේව් කිරීමේ Function එක
+    function addNewMovieFromDash() {
         const title = document.getElementById('movieTitle').value.trim();
         const genre = document.getElementById('movieGenre').value.trim();
         const img = document.getElementById('movieImg').value.trim();
         const link = document.getElementById('movieLink').value.trim();
-        const download = document.getElementById('movieDownload').value.trim(); // ඩවුන්ලෝඩ් දත්තය ලබා ගැනීම
+        const download = document.getElementById('movieDownload').value.trim();
 
-        // අනිවාර්ය Field පිරෙව්වාද කියා බැලීම
         if (title === "" || genre === "") {
-            alert("Please enter at least Title and Genre!");
+            alert("Please enter Movie Title and Genre!");
             return;
         }
 
-        // නව චිත්‍රපටයේ Object එකක් සෑදීම
         const newMovieObj = {
             title: title,
             genre: genre,
-            img: img ? img : "https://images.unsplash.com/photo-1489599849927-2ee91cede3ba?q=80&w=400", // පෝස්ටරයක් නැතිනම් Default එකක් වැටේ
+            img: img ? img : "https://images.unsplash.com/photo-1489599849927-2ee91cede3ba?q=80&w=400",
             link: link ? link : "#",
-            download: download ? download : "#" // ඩවුන්ලෝඩ් ලින්ක් එක එකතු කිරීම
+            download: download ? download : "#"
         };
 
-        // කලින් තිබුන ලිස්ට් එක ලබාගෙන අලුත් එක එකතු කිරීම
         const currentMovies = JSON.parse(localStorage.getItem('movies')) || [];
-        currentMovies.push(newMovieObj);
-        
-        // ආපසු LocalStorage එකට සේව් කිරීම
+        currentMovies.unshift(newMovieObj); // අලුත් එක ලිස්ට් එකේ මුලටම දානවා
         localStorage.setItem('movies', JSON.stringify(currentMovies));
 
-        // Form එක Reset කිරීම සහ Success Message එක පෙන්වීම
+        // ලිස්ට් එක ක්ෂණිකව අප්ඩේට් කිරීම
+        loadMainMovies();
+
+        // Inputs හිස් කිරීම
         document.getElementById('movieTitle').value = '';
         document.getElementById('movieGenre').value = '';
         document.getElementById('movieImg').value = '';
@@ -118,10 +308,52 @@
 
         const statusMsg = document.getElementById('statusMsg');
         statusMsg.style.display = 'block';
-        setTimeout(() => {
-            statusMsg.style.style.display = 'none';
-        }, 3000);
+        setTimeout(() => { statusMsg.style.display = 'none'; }, 3000);
     }
+
+    function logout() {
+        localStorage.removeItem('loggedInUser');
+        window.location.reload();
+    }
+
+    // වීඩියෝ අප්ලෝඩ් ප්‍රිවිව් එක
+    const uploadInput = document.getElementById('movieUpload');
+    const previewContainer = document.getElementById('previewContainer');
+
+    uploadInput.addEventListener('change', function(){
+      const file = this.files[0];
+      if(file){
+        const videoURL = URL.createObjectURL(file);
+        previewContainer.innerHTML = `
+          <video controls autoplay style="width:100%; max-width:850px; border-radius:22px;">
+            <source src="${videoURL}" type="${file.type}">
+          </video>
+          <p style="margin-top:18px; color:#c7c7d6;">Now Previewing: ${file.name}</p>
+        `;
+      }
+    });
+
+    // Scroll Animations
+    const revealElements = document.querySelectorAll('.feature-box, .movie-card, .upload-area, .contact');
+    const revealOnScroll = () => {
+      revealElements.forEach(el => {
+        const windowHeight = window.innerHeight;
+        const elementTop = el.getBoundingClientRect().top;
+        if(elementTop < windowHeight - 100){
+          el.style.opacity = '1';
+          el.style.transform = 'translateY(0px)';
+          el.style.transition = 'all 0.8s ease';
+        }
+      });
+    }
+    
+    revealElements.forEach(el => { el.style.opacity = '0'; el.style.transform = 'translateY(40px)'; });
+    window.addEventListener('scroll', revealOnScroll);
+    
+    // ආරම්භයේදී ක්‍රියාත්මක වන දේවල්
+    loadMainMovies();
+    checkAuthStatus();
+    setTimeout(revealOnScroll, 300); 
   </script>
 </body>
 </html>
