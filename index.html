@@ -9,7 +9,8 @@
   <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
 
   <style>
-    *{ margin:0; padding:0; box-sizing:border-box; scroll-behavior:smooth; font-family:'Poppins',sans-serif; }
+    *{ margin:0; padding:0; box-sizing:border-box; font-family:'Poppins',sans-serif; }
+    html { scroll-behavior: smooth; }
     body{ background:#050816; color:#fff; overflow-x:hidden; }
     body::before{ content:''; position:fixed; width:500px; height:500px; background:rgba(0,123,255,0.25); filter:blur(120px); top:-100px; left:-100px; z-index:-1; }
     body::after{ content:''; position:fixed; width:500px; height:500px; background:rgba(255,0,76,0.22); filter:blur(120px); bottom:-150px; right:-100px; z-index:-1; }
@@ -19,7 +20,7 @@
     .logo-icon{ width:48px; height:48px; border-radius:14px; background:linear-gradient(135deg,#008cff,#ff004f); display:flex; justify-content:center; align-items:center; color:#fff; font-size:1.4rem; box-shadow:0 0 30px rgba(0,140,255,0.5); }
     
     nav { display: flex; align-items: center; }
-    nav a{ color:#fff; text-decoration:none; margin-left:28px; font-weight:500; transition:0.3s; position:relative; }
+    nav a{ color:#fff; text-decoration:none; margin-left:28px; font-weight:500; transition:0.3s; position:relative; cursor: pointer; }
     nav a:hover{ color:#2ea0ff; }
     .user-tag { background: rgba(0, 119, 255, 0.2); padding: 5px 12px; border-radius: 20px; border: 1px solid #0077ff; color: #2ea0ff; margin-left: 15px; }
     .logout-link { color: #ff004f !important; cursor: pointer; margin-left: 15px; }
@@ -43,7 +44,7 @@
     .card-content h2{ margin-bottom:10px; }
     .card-content p{ color:#c5c5d4; line-height:1.7; margin-bottom:20px; }
     
-    section{ padding:90px 7%; }
+    section{ padding:90px 7%; border-top: 1px solid rgba(255,255,255,0.02); }
     .section-title{ text-align:center; font-size:2.7rem; margin-bottom:55px; font-weight:800; }
     .section-title span{ background:linear-gradient(90deg,#2ea0ff,#ff004f); -webkit-background-clip:text; -webkit-text-fill-color:transparent; }
     
@@ -397,23 +398,71 @@
         window.location.reload();
     }
 
-    // Video Upload Preview
+    // 📥 Video Upload & Direct Auto Update Function
     const uploadInput = document.getElementById('movieUpload');
     const previewContainer = document.getElementById('previewContainer');
+    
     if(uploadInput) {
         uploadInput.addEventListener('change', function(){
           const file = this.files[0];
           if(file){
             const videoURL = URL.createObjectURL(file);
+            
+            // 1. සෙක්ෂන් එකේ වීඩියෝ එක ප්ලේ කරන්න දානවා
             previewContainer.innerHTML = `
               <video controls autoplay style="width:100%; max-width:850px; border-radius:22px;">
                 <source src="${videoURL}" type="${file.type}">
               </video>
-              <p style="margin-top:18px; color:#c7c7d6;">Now Previewing: ${file.name}</p>
+              <p style="margin-top:18px; color:#00ff77; font-weight:500;">✔ Previewing & Added to List: ${file.name}</p>
             `;
+
+            // 2. වීඩියෝ ෆයිල් එකේ නම Clean කරලා අරගන්නවා (.mp4, .mkv වගේ ඒවා අයින් කරලා)
+            let cleanedTitle = file.name.replace(/\.[^/.]+$/, "");
+
+            // 3. අලුත් Movie Object එකක් හදනවා
+            const newUploadedMovie = {
+                title: cleanedTitle,
+                genre: "Local Video File",
+                img: "https://images.unsplash.com/photo-1489599849927-2ee91cede3ba?q=80&w=400", // Default Unsplash poster
+                link: videoURL, // ක්ලික් කරපු ගමන් ප්ලේ වෙන්න ලෝකල් බ්ලොබ් යූආර්එල් එක දෙනවා
+                download: "#"
+            };
+
+            // 4. Local Storage එකට උඩින්ම ඇඩ් කරනවා
+            let allMovies = JSON.parse(localStorage.getItem('movies')) || [];
+            allMovies.unshift(newUploadedMovie);
+            localStorage.setItem('movies', JSON.stringify(allMovies));
+
+            // 5. සයිට් එකේ ලිස්ට් රීලෝඩ් කරනවා සැනෙකින් පේන්න
+            loadMainMovies();
+            if(JSON.parse(localStorage.getItem('loggedInUser'))?.role === 'admin') {
+                renderAdminMovieList();
+            }
+
+            // 6. කෙලින්ම Trending Movies සෙක්ෂන් එකට ස්ක්‍රෝල් කරලා පෙන්වනවා
+            setTimeout(() => {
+                window.scrollTo({ top: document.getElementById('movies').offsetTop - 70, behavior: 'smooth' });
+            }, 1500);
           }
         });
     }
+
+    // ⚡ Fix Fixed Header Jump/Refresh Loops for Mobile Menu
+    document.querySelectorAll('nav a, .btns a').forEach(link => {
+        link.addEventListener('click', function(e) {
+            const targetId = this.getAttribute('href');
+            if(targetId && targetId.startsWith('#')) {
+                e.preventDefault();
+                const targetElement = document.querySelector(targetId);
+                if(targetElement) {
+                    window.scrollTo({
+                        top: targetElement.offsetTop - 75,
+                        behavior: 'smooth'
+                    });
+                }
+            }
+        });
+    });
 
     // Scroll Animations
     const revealElements = document.querySelectorAll('.feature-box, .movie-card, .upload-area, .contact');
