@@ -59,15 +59,21 @@
     .movie-info{ padding:18px; display: flex; flex-direction: column; flex-grow: 1; justify-content: space-between; }
     .movie-info h4{ margin-bottom:5px; font-size: 1.1rem; }
     .movie-info p{ color: #8c8ca1; font-size: 0.85rem; margin-bottom: 12px; }
-    .watch-btn{ width:100%; padding:12px; border:none; border-radius:12px; background:linear-gradient(90deg,#0077ff,#ff004f); color:#fff; font-weight:600; cursor:pointer; text-align: center; text-decoration: none; display: block; transition: 0.3s; }
+    
+    /* බටන් දෙක ලස්සනට පැත්තෙන් පැත්තට තියාගන්න වෙනස්කම් */
+    .movie-actions-group { display: flex; gap: 10px; margin-top: auto; }
+    .watch-btn{ flex: 1; padding:12px; border:none; border-radius:12px; background:linear-gradient(90deg,#0077ff,#ff004f); color:#fff; font-weight:600; cursor:pointer; text-align: center; text-decoration: none; display: block; transition: 0.3s; font-size: 0.9rem; }
     .watch-btn:hover{ opacity: 0.9; transform: scale(1.02); }
+    .download-btn-inline { flex: 1; padding:12px; border:1px solid #ff004f; border-radius:12px; background: rgba(255, 0, 79, 0.1); color:#ff004f; font-weight:600; cursor:pointer; text-align: center; text-decoration: none; display: block; transition: 0.3s; font-size: 0.9rem; }
+    .download-btn-inline:hover { background: #ff004f; color: #fff; transform: scale(1.02); }
+
     .contact{ text-align:center; background:rgba(255,255,255,0.04); border:1px solid rgba(255,255,255,0.07); border-radius:30px; padding:55px 30px; backdrop-filter:blur(12px); }
     .contact h2{ margin-bottom:20px; font-size:2.5rem; }
     .contact p{ color:#c7c7d6; margin-bottom:15px; font-size:1.05rem; }
     footer{ text-align:center; padding:30px; color:#8c8ca1; border-top:1px solid rgba(255,255,255,0.08); margin-top:60px; }
     @keyframes float{ 0%{transform:translateY(0px);} 50%{transform:translateY(-15px);} 100%{transform:translateY(0px);} }
     @keyframes fadeIn{ from{opacity:0; transform:translateY(30px);} to{opacity:1; transform:translateY(0);} }
-    @media(max-width:900px){ .hero{ flex-direction:column; text-align:center; } .hero-text h1{ font-size:3rem; } nav{ display:none; } }
+    @media(max-width:900px){ .hero{ flex-direction:column; text-align:center; } .hero-text h1{ font-size:3rem; } nav{ display:none; } .movie-actions-group { flex-direction: column; } }
   </style>
 </head>
 <body>
@@ -151,19 +157,73 @@
   <footer>© 2026 CINEFLEX. All Rights Reserved.</footer>
 
   <script>
-    // 🔗 1. LocalStorage එකෙන් ඇඩ්මින් දාන දත්ත කියවා පෙන්වීම
+    // 🔗 1. Movies 40+ ක විශාල ලිස්ට් එකක් සහ Admin Download පහසුකම ක්‍රියාත්මක කිරීම
     function loadMainMovies() {
+        // අලුත්ම සහ ප්‍රසිද්ධ චිත්‍රපට 40ක ස්ථිර ලිස්ට් එක (Default Fallback Movies)
+        const defaultMovies = [
+            { title: "Dune: Part Two", genre: "Sci-Fi | Action", img: "https://images.unsplash.com/photo-1534447677768-be436bb09401?q=80&w=400", link: "#", download: "#" },
+            { title: "Deadpool & Wolverine", genre: "Action | Comedy", img: "https://images.unsplash.com/photo-1635805737707-575885ab0820?q=80&w=400", link: "#", download: "#" },
+            { title: "Inside Out 2", genre: "Animation | Family", img: "https://images.unsplash.com/photo-1608889174637-3c44f6326f20?q=80&w=400", link: "#", download: "#" },
+            { title: "Oppenheimer", genre: "Biography | Drama", img: "https://images.unsplash.com/photo-1440404653325-ab127d49abc1?q=80&w=400", link: "#", download: "#" },
+            { title: "Avatar: The Way of Water", genre: "Sci-Fi | Adventure", img: "https://images.unsplash.com/photo-1518709268805-4e9042af9f23?q=80&w=400", link: "https://www.w3schools.com/html/mov_bbb.mp4", download: "#" },
+            { title: "Interstellar", genre: "Sci-Fi | Mystery", img: "https://images.unsplash.com/photo-1451187580459-43490279c0fa?q=80&w=400", link: "https://www.w3schools.com/html/movie.mp4", download: "#" },
+            { title: "Gladiator II", genre: "Action | Drama", img: "https://images.unsplash.com/photo-1559170628-9903891edd9e?q=80&w=400", link: "#", download: "#" },
+            { title: "Spider-Man: Beyond the Spider-Verse", genre: "Animation | Action", img: "https://images.unsplash.com/photo-1608889175123-8ec330b86f84?q=80&w=400", link: "#", download: "#" },
+            { title: "The Dark Knight", genre: "Action | Crime", img: "https://images.unsplash.com/photo-1478760329108-5c3ed9d495a0?q=80&w=400", link: "#", download: "#" },
+            { title: "Inception", genre: "Sci-Fi | Action", img: "https://images.unsplash.com/photo-1509198397868-475647b2a1e5?q=80&w=400", link: "#", download: "#" },
+            { title: "The Batman", genre: "Action | Crime", img: "https://images.unsplash.com/photo-1534447677768-be436bb09401?q=80&w=400", link: "#", download: "#" },
+            { title: "Top Gun: Maverick", genre: "Action | Drama", img: "https://images.unsplash.com/photo-1519074002996-a69e7ac46a42?q=80&w=400", link: "#", download: "#" },
+            { title: "John Wick: Chapter 4", genre: "Action | Thriller", img: "https://images.unsplash.com/photo-1594909122845-11baa439b7bf?q=80&w=400", link: "#", download: "#" },
+            { title: "Joker: Folie à Deux", genre: "Drama | Musical", img: "https://images.unsplash.com/photo-1626814026160-2237a95fc5a0?q=80&w=400", link: "#", download: "#" },
+            { title: "Barbie", genre: "Comedy | Fantasy", img: "https://images.unsplash.com/photo-1559583985-c80d8ad9b29f?q=80&w=400", link: "#", download: "#" },
+            { title: "The Avengers", genre: "Action | Sci-Fi", img: "https://images.unsplash.com/photo-1569003339405-ea396a5a8a90?q=80&w=400", link: "#", download: "#" },
+            { title: "Everything Everywhere All at Once", genre: "Sci-Fi | Comedy", img: "https://images.unsplash.com/photo-1533928298208-27ff66555d8d?q=80&w=400", link: "#", download: "#" },
+            { title: "Alien: Romulus", genre: "Horror | Sci-Fi", img: "https://images.unsplash.com/photo-1501534159991-aba4849e01df?q=80&w=400", link: "#", download: "#" },
+            { title: "Godzilla x Kong: The New Empire", genre: "Action | Sci-Fi", img: "https://images.unsplash.com/photo-1579783902614-a3fb3927b6a5?q=80&w=400", link: "#", download: "#" },
+            { title: "Kingdom of the Planet of the Apes", genre: "Sci-Fi | Action", img: "https://images.unsplash.com/photo-1448375240586-882707db888b?q=80&w=400", link: "#", download: "#" },
+            { title: "Furiosa: A Mad Max Saga", genre: "Action | Sci-Fi", img: "https://images.unsplash.com/photo-1509114397022-ed747cca3f65?q=80&w=400", link: "#", download: "#" },
+            { title: "Challengers", genre: "Drama | Romance", img: "https://images.unsplash.com/photo-1626224583764-f87db24ac4ea?q=80&w=400", link: "#", download: "#" },
+            { title: "Knives Out", genre: "Mystery | Comedy", img: "https://images.unsplash.com/photo-1585647347483-22b66260dfff?q=80&w=400", link: "#", download: "#" },
+            { title: "Bullet Train", genre: "Action | Comedy", img: "https://images.unsplash.com/photo-1536440136628-849c177e76a1?q=80&w=400", link: "#", download: "#" },
+            { title: "The Gray Man", genre: "Action | Thriller", img: "https://images.unsplash.com/photo-1505686994434-e3cc5abf1330?q=80&w=400", link: "#", download: "#" },
+            { title: "Extraction 2", genre: "Action | Thriller", img: "https://images.unsplash.com/photo-1611526114392-8098fa55342a?q=80&w=400", link: "#", download: "#" },
+            { title: "Red Notice", genre: "Action | Comedy", img: "https://images.unsplash.com/photo-1578328819058-b69f3a3b0f6b?q=80&w=400", link: "#", download: "#" },
+            { title: "Spirited Away", genre: "Animation | Fantasy", img: "https://images.unsplash.com/photo-1578632767115-351597cf2477?q=80&w=400", link: "#", download: "#" },
+            { title: "Your Name", genre: "Animation | Drama", img: "https://images.unsplash.com/photo-1534447677768-be436bb09401?q=80&w=400", link: "#", download: "#" },
+            { title: "Demon Slayer: Mugen Train", genre: "Animation | Action", img: "https://images.unsplash.com/photo-1607604276583-eef5d076aa5f?q=80&w=400", link: "#", download: "#" },
+            { title: "The Matrix Resurrections", genre: "Sci-Fi | Action", img: "https://images.unsplash.com/photo-1426604966848-d7adac402bff?q=80&w=400", link: "#", download: "#" },
+            { title: "Blade Runner 2049", genre: "Sci-Fi | Mystery", img: "https://images.unsplash.com/photo-1547394765-185e1e68f34e?q=80&w=400", link: "#", download: "#" },
+            { title: "Mad Max: Fury Road", genre: "Action | Sci-Fi", img: "https://images.unsplash.com/photo-1514539079130-25950c84af65?q=80&w=400", link: "#", download: "#" },
+            { title: "Twisters", genre: "Action | Adventure", img: "https://images.unsplash.com/photo-1461088945293-0c17689e48ac?q=80&w=400", link: "#", download: "#" },
+            { title: "A Quiet Place: Day One", genre: "Horror | Sci-Fi", img: "https://images.unsplash.com/photo-1509114397022-ed747cca3f65?q=80&w=400", link: "#", download: "#" },
+            { title: "The Shawshank Redemption", genre: "Drama", img: "https://images.unsplash.com/photo-1489599849927-2ee91cede3ba?q=80&w=400", link: "#", download: "#" },
+            { title: "Pulp Fiction", genre: "Crime | Drama", img: "https://images.unsplash.com/photo-1594909122845-11baa439b7bf?q=80&w=400", link: "#", download: "#" },
+            { title: "Fight Club", genre: "Drama", img: "https://images.unsplash.com/photo-1579546929518-9e396f3cc809?q=80&w=400", link: "#", download: "#" },
+            { title: "Forrest Gump", genre: "Drama | Romance", img: "https://images.unsplash.com/photo-1444703686981-a3abbc4d4fe3?q=80&w=400", link: "#", download: "#" },
+            { title: "Gladiator (2000)", genre: "Action | Adventure", img: "https://images.unsplash.com/photo-1533105079780-92b9be482077?q=80&w=400", link: "#", download: "#" }
+        ];
+
+        // 💾 LocalStorage එකෙන් ඇඩ්මින් දාපු අලුත් ඒවා කියවීම
         const localMovies = JSON.parse(localStorage.getItem('movies')) || [];
+        
+        // 🤝 ඇඩ්මින්ගේ ඒවා සහ ස්ථිර ඒවා එකතු කිරීම (ඇඩ්මින් දාන ඒවා මුලටම එයි)
+        const allMovies = [...localMovies, ...defaultMovies];
+
         const grid = document.getElementById('mainMoviesGrid');
         grid.innerHTML = '';
         
-        if(localMovies.length === 0) {
-            grid.innerHTML = `<p style="color:#8c8ca1; text-align:center; grid-column: 1/-1; font-size:1.2rem;">No movies available. Add movies via Admin Dashboard.</p>`;
-            return;
-        }
-        
-        localMovies.forEach(m => {
+        allMovies.forEach(m => {
             const movieLink = m.link ? m.link : '#';
+            
+            // 📥 ඩිස්ප්ලේ එකේ Download Button එක පෙන්විය යුතුද නැද්ද යන්න තීරණය කිරීම
+            let downloadButtonHTML = '';
+            if (m.download && m.download !== '#' && m.download !== '') {
+                downloadButtonHTML = `<a href="${m.download}" target="_blank" class="download-btn-inline">Download</a>`;
+            } else {
+                // Default චිත්‍රපට සඳහාත් Download බටන් එක පෙනෙන්න අවශ්‍ය නම් මෙය ක්‍රියාත්මක වේ
+                downloadButtonHTML = `<a href="${movieLink}" target="_blank" class="download-btn-inline">Download</a>`;
+            }
+
             grid.innerHTML += `
               <div class="movie-card">
                 <img src="${m.img}" alt="Poster" onerror="this.src='https://images.unsplash.com/photo-1489599849927-2ee91cede3ba?q=80&w=400'">
@@ -172,14 +232,17 @@
                     <h4>${m.title}</h4>
                     <p>${m.genre}</p>
                   </div>
-                  <a href="${movieLink}" target="_blank" class="watch-btn">Watch Now</a>
+                  <div class="movie-actions-group">
+                    <a href="${movieLink}" target="_blank" class="watch-btn">Watch Now</a>
+                    ${downloadButtonHTML}
+                  </div>
                 </div>
               </div>
             `;
         });
     }
 
-    // 🔒 2. Navbar එකේ ඇඩ්මින් නම් Dashboard බටන් එක පෙන්වීම
+    // 🔒 2. Navbar Auth Status
     function checkAuthStatus() {
         const loggedInUser = JSON.parse(localStorage.getItem('loggedInUser'));
         const authStatusContainer = document.getElementById('authStatus');
