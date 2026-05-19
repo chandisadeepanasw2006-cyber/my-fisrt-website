@@ -1,491 +1,729 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>CINEFLEX | Ultimate Streaming Experience</title>
-  <link rel="preconnect" href="https://fonts.googleapis.com">
-  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<title>CINEFLEX | Ultimate Streaming Experience</title>
 
-  <style>
-    *{ margin:0; padding:0; box-sizing:border-box; font-family:'Poppins',sans-serif; }
-    html { scroll-behavior: smooth; }
-    body{ background:#050816; color:#fff; overflow-x:hidden; }
-    body::before{ content:''; position:fixed; width:500px; height:500px; background:rgba(0,123,255,0.25); filter:blur(120px); top:-100px; left:-100px; z-index:-1; }
-    body::after{ content:''; position:fixed; width:500px; height:500px; background:rgba(255,0,76,0.22); filter:blur(120px); bottom:-150px; right:-100px; z-index:-1; }
-    
-    header{ position:fixed; width:100%; top:0; left:0; display:flex; justify-content:space-between; align-items:center; padding:18px 7%; backdrop-filter:blur(15px); background:rgba(10,10,25,0.45); border-bottom:1px solid rgba(255,255,255,0.08); z-index:1000; }
-    .logo{ display:flex; align-items:center; gap:12px; font-size:1.8rem; font-weight:800; letter-spacing:1px; background:linear-gradient(90deg,#2ea0ff,#ff004f); -webkit-background-clip:text; -webkit-text-fill-color:transparent; }
-    .logo-icon{ width:48px; height:48px; border-radius:14px; background:linear-gradient(135deg,#008cff,#ff004f); display:flex; justify-content:center; align-items:center; color:#fff; font-size:1.4rem; box-shadow:0 0 30px rgba(0,140,255,0.5); }
-    
-    nav { display: flex; align-items: center; }
-    nav a{ color:#fff; text-decoration:none; margin-left:28px; font-weight:500; transition:0.3s; position:relative; cursor: pointer; }
-    nav a:hover{ color:#2ea0ff; }
-    .user-tag { background: rgba(0, 119, 255, 0.2); padding: 5px 12px; border-radius: 20px; border: 1px solid #0077ff; color: #2ea0ff; margin-left: 15px; }
-    .logout-link { color: #ff004f !important; cursor: pointer; margin-left: 15px; }
-    
-    .hero{ min-height:100vh; display:flex; align-items:center; justify-content:space-between; padding:140px 7% 70px; gap:50px; }
-    .hero-text{ flex:1; animation:fadeIn 1s ease; }
-    .hero-text h1{ font-size:4rem; line-height:1.1; margin-bottom:20px; }
-    .hero-text h1 span{ background:linear-gradient(90deg,#2ea0ff,#ff004f); -webkit-background-clip:text; -webkit-text-fill-color:transparent; }
-    .hero-text p{ color:#c7c7d6; font-size:1.05rem; line-height:1.8; margin-bottom:30px; max-width:650px; }
-    .btns{ display:flex; gap:18px; flex-wrap:wrap; }
-    .btn{ padding:14px 28px; border:none; border-radius:14px; cursor:pointer; font-size:1rem; font-weight:600; transition:0.4s; text-decoration:none; display:inline-flex; align-items:center; gap:10px; }
-    .primary{ background:linear-gradient(90deg,#0077ff,#ff004f); color:#fff; box-shadow:0 10px 25px rgba(0,119,255,0.35); }
-    .primary:hover{ transform:translateY(-4px) scale(1.02); }
-    .secondary{ border:1px solid rgba(255,255,255,0.15); background:rgba(255,255,255,0.04); color:#fff; }
-    .secondary:hover{ background:rgba(255,255,255,0.08); }
-    
-    .hero-card{ flex:1; display:flex; justify-content:center; animation:float 4s ease-in-out infinite; }
-    .card{ width:100%; max-width:480px; background:rgba(255,255,255,0.06); border:1px solid rgba(255,255,255,0.08); border-radius:28px; overflow:hidden; backdrop-filter:blur(15px); box-shadow:0 20px 40px rgba(0,0,0,0.45); }
-    .card img{ width:100%; height:280px; object-fit:cover; }
-    .card-content{ padding:24px; }
-    .card-content h2{ margin-bottom:10px; }
-    .card-content p{ color:#c5c5d4; line-height:1.7; margin-bottom:20px; }
-    
-    section{ padding:90px 7%; border-top: 1px solid rgba(255,255,255,0.02); }
-    .section-title{ text-align:center; font-size:2.7rem; margin-bottom:55px; font-weight:800; }
-    .section-title span{ background:linear-gradient(90deg,#2ea0ff,#ff004f); -webkit-background-clip:text; -webkit-text-fill-color:transparent; }
-    
-    .admin-wrapper { max-width: 700px; margin: 0 auto; display: flex; flex-direction: column; gap: 30px; }
-    .admin-container { background: rgba(255, 255, 255, 0.04); border: 1px solid rgba(255, 255, 255, 0.08); border-radius: 24px; padding: 40px; backdrop-filter: blur(15px); box-shadow: 0 20px 40px rgba(0, 0, 0, 0.45); }
-    .admin-container h3 { font-size: 1.6rem; font-weight: 700; margin-bottom: 25px; letter-spacing: 0.5px; }
-    .input-group { margin-bottom: 20px; }
-    .input-group input { width: 100%; padding: 16px 20px; background: rgba(10, 14, 30, 0.6); border: 1px solid rgba(255, 255, 255, 0.1); border-radius: 14px; color: #fff; font-size: 0.95rem; transition: 0.3s; }
-    .input-group input:focus { outline: none; border-color: #0077ff; box-shadow: 0 0 15px rgba(0, 119, 255, 0.2); }
-    .input-group input::placeholder { color: #4e5264; }
-    .admin-add-btn { width: 100%; padding: 16px; border: none; border-radius: 14px; background: #0077ff; color: #fff; font-size: 1rem; font-weight: 600; cursor: pointer; transition: 0.3s; box-shadow: 0 4px 15px rgba(0, 119, 255, 0.3); }
-    .admin-add-btn:hover { background: #0062d1; transform: translateY(-2px); }
-    .status-success { color: #00ff77; text-align: center; margin-top: 15px; font-size: 0.9rem; display: none; }
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
 
-    .manage-table { width: 100%; border-collapse: collapse; margin-top: 10px; }
-    .manage-table tr { border-bottom: 1px solid rgba(255, 255, 255, 0.06); }
-    .manage-table td { padding: 15px 10px; font-size: 0.95rem; }
-    .action-btns { display: flex; gap: 8px; justify-content: flex-end; }
-    .edit-inline-btn { background: #2ea0ff; color: #fff; border: none; padding: 6px 14px; border-radius: 8px; font-weight: 600; cursor: pointer; transition: 0.2s; }
-    .edit-inline-btn:hover { background: #0084ff; }
-    .delete-inline-btn { background: #ff004f; color: #fff; border: none; padding: 6px 14px; border-radius: 8px; font-weight: 600; cursor: pointer; transition: 0.2s; }
-    .delete-inline-btn:hover { background: #cc003f; }
+<style>
 
-    .features{ display:grid; grid-template-columns:repeat(auto-fit,minmax(250px,1fr)); gap:25px; }
-    .feature-box{ background:rgba(255,255,255,0.05); border:1px solid rgba(255,255,255,0.08); border-radius:24px; padding:35px 25px; transition:0.4s; backdrop-filter:blur(12px); }
-    .feature-box:hover{ transform:translateY(-10px); border-color:#0077ff; box-shadow:0 15px 40px rgba(0,119,255,0.15); }
-    .feature-icon{ width:70px; height:70px; border-radius:18px; background:linear-gradient(135deg,#0077ff,#ff004f); display:flex; align-items:center; justify-content:center; font-size:1.7rem; margin-bottom:22px; }
-    .feature-box h3{ margin-bottom:14px; }
-    .feature-box p{ color:#c7c7d6; line-height:1.7; }
-    
-    .upload-area{ background:rgba(255,255,255,0.05); border:2px dashed rgba(255,255,255,0.15); border-radius:25px; padding:50px; text-align:center; backdrop-filter:blur(10px); }
-    .upload-area h3{ margin-bottom:15px; font-size:1.8rem; }
-    .upload-area p{ color:#c7c7d6; margin-bottom:25px; }
-    .upload-btn { display:inline-block; padding:15px 30px; border-radius:16px; background:linear-gradient(90deg,#0077ff,#ff004f); cursor:pointer; font-weight:600; transition:0.4s; }
-    input[type="file"]{ display:none; }
-    
-    .movies-grid{ display:grid; grid-template-columns:repeat(auto-fit,minmax(220px,1fr)); gap:25px; margin-top:45px; }
-    .movie-card{ background:rgba(255,255,255,0.05); border-radius:22px; overflow:hidden; border:1px solid rgba(255,255,255,0.07); transition:0.4s; backdrop-filter:blur(12px); display: flex; flex-direction: column; justify-content: space-between; }
-    .movie-card:hover{ transform:translateY(-10px); box-shadow:0 15px 35px rgba(255,0,76,0.18); }
-    .movie-card img{ width:100%; height:300px; object-fit:cover; }
-    .movie-info{ padding:18px; display: flex; flex-direction: column; flex-grow: 1; justify-content: space-between; }
-    .movie-info h4{ margin-bottom:5px; font-size: 1.1rem; }
-    .movie-info p{ color: #8c8ca1; font-size: 0.85rem; margin-bottom: 12px; }
-    
-    .movie-actions-group { display: flex; gap: 10px; margin-top: auto; }
-    .watch-btn{ flex: 1; padding:12px; border:none; border-radius:12px; background:linear-gradient(90deg,#0077ff,#ff004f); color:#fff; font-weight:600; cursor:pointer; text-align: center; text-decoration: none; display: block; transition: 0.3s; font-size: 0.9rem; }
-    .watch-btn:hover{ opacity: 0.9; transform: scale(1.02); }
-    .download-btn-inline { flex: 1; padding:12px; border:1px solid #ff004f; border-radius:12px; background: rgba(255, 0, 79, 0.1); color:#ff004f; font-weight:600; cursor:pointer; text-align: center; text-decoration: none; display: block; transition: 0.3s; font-size: 0.9rem; }
-    .download-btn-inline:hover { background: #ff004f; color: #fff; transform: scale(1.02); }
+*{
+  margin:0;
+  padding:0;
+  box-sizing:border-box;
+  font-family:'Poppins',sans-serif;
+}
 
-    .contact{ text-align:center; background:rgba(255,255,255,0.04); border:1px solid rgba(255,255,255,0.07); border-radius:30px; padding:55px 30px; backdrop-filter:blur(12px); }
-    .contact h2{ margin-bottom:20px; font-size:2.5rem; }
-    .contact p{ color:#c7c7d6; margin-bottom:15px; font-size:1.05rem; }
-    footer{ text-align:center; padding:30px; color:#8c8ca1; border-top:1px solid rgba(255,255,255,0.08); margin-top:60px; }
-    
-    @keyframes float{ 0%{transform:translateY(0px);} 50%{transform:translateY(-15px);} 100%{transform:translateY(0px);} }
-    @keyframes fadeIn{ from{opacity:0; transform:translateY(30px);} to{opacity:1; transform:translateY(0);} }
-    
-    @media(max-width:900px){ 
-      header { padding: 12px 5%; }
-      .logo { font-size: 1.4rem; }
-      .logo-icon { width: 38px; height: 38px; font-size: 1.1rem; border-radius: 10px; }
-      nav { display: flex; flex-wrap: wrap; justify-content: center; gap: 10px; margin-top: 5px; }
-      nav a { font-size: 0.85rem; margin-left: 12px; }
-      .user-tag { margin-left: 8px; padding: 3px 8px; font-size: 0.8rem; }
-      .logout-link { margin-left: 8px; font-size: 0.8rem; }
-      
-      .hero{ flex-direction:column; text-align:center; padding: 120px 5% 40px; gap:40px; } 
-      .hero-text h1{ font-size:2.6rem; } 
-      .movie-actions-group { flex-direction: column; } 
-    }
-  </style>
+html{
+  scroll-behavior:smooth;
+}
+
+body{
+  background:#050816;
+  color:#fff;
+  overflow-x:hidden;
+  width:100%;
+}
+
+img{
+  max-width:100%;
+  display:block;
+}
+
+video{
+  max-width:100%;
+}
+
+a,button{
+  -webkit-tap-highlight-color:transparent;
+}
+
+body::before{
+  content:'';
+  position:fixed;
+  width:500px;
+  height:500px;
+  background:rgba(0,123,255,0.25);
+  filter:blur(120px);
+  top:-100px;
+  left:-100px;
+  z-index:-1;
+}
+
+body::after{
+  content:'';
+  position:fixed;
+  width:500px;
+  height:500px;
+  background:rgba(255,0,76,0.22);
+  filter:blur(120px);
+  bottom:-150px;
+  right:-100px;
+  z-index:-1;
+}
+
+header{
+  position:fixed;
+  width:100%;
+  top:0;
+  left:0;
+  display:flex;
+  justify-content:space-between;
+  align-items:center;
+  padding:18px 7%;
+  backdrop-filter:blur(15px);
+  -webkit-backdrop-filter:blur(15px);
+  background:rgba(10,10,25,0.45);
+  border-bottom:1px solid rgba(255,255,255,0.08);
+  z-index:1000;
+}
+
+.logo{
+  display:flex;
+  align-items:center;
+  gap:12px;
+  font-size:1.8rem;
+  font-weight:800;
+  letter-spacing:1px;
+  background:linear-gradient(90deg,#2ea0ff,#ff004f);
+  -webkit-background-clip:text;
+  -webkit-text-fill-color:transparent;
+}
+
+.logo-icon{
+  width:48px;
+  height:48px;
+  border-radius:14px;
+  background:linear-gradient(135deg,#008cff,#ff004f);
+  display:flex;
+  justify-content:center;
+  align-items:center;
+  color:#fff;
+  font-size:1.4rem;
+  box-shadow:0 0 30px rgba(0,140,255,0.5);
+}
+
+nav{
+  display:flex;
+  align-items:center;
+  flex-wrap:wrap;
+}
+
+nav a{
+  color:#fff;
+  text-decoration:none;
+  margin-left:28px;
+  font-weight:500;
+  transition:0.3s;
+}
+
+nav a:hover{
+  color:#2ea0ff;
+}
+
+.hero{
+  min-height:100vh;
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+  padding:140px 7% 70px;
+  gap:50px;
+}
+
+.hero-text{
+  flex:1;
+}
+
+.hero-text h1{
+  font-size:4rem;
+  line-height:1.1;
+  margin-bottom:20px;
+}
+
+.hero-text h1 span{
+  background:linear-gradient(90deg,#2ea0ff,#ff004f);
+  -webkit-background-clip:text;
+  -webkit-text-fill-color:transparent;
+}
+
+.hero-text p{
+  color:#c7c7d6;
+  font-size:1.05rem;
+  line-height:1.8;
+  margin-bottom:30px;
+  max-width:650px;
+}
+
+.btns{
+  display:flex;
+  gap:18px;
+  flex-wrap:wrap;
+}
+
+.btn{
+  padding:14px 28px;
+  border:none;
+  border-radius:14px;
+  cursor:pointer;
+  font-size:1rem;
+  font-weight:600;
+  transition:0.4s;
+  text-decoration:none;
+  display:inline-flex;
+  align-items:center;
+  gap:10px;
+}
+
+.primary{
+  background:linear-gradient(90deg,#0077ff,#ff004f);
+  color:#fff;
+}
+
+.secondary{
+  border:1px solid rgba(255,255,255,0.15);
+  background:rgba(255,255,255,0.04);
+  color:#fff;
+}
+
+.hero-card{
+  flex:1;
+  display:flex;
+  justify-content:center;
+}
+
+.card{
+  width:100%;
+  max-width:480px;
+  background:rgba(255,255,255,0.06);
+  border:1px solid rgba(255,255,255,0.08);
+  border-radius:28px;
+  overflow:hidden;
+  backdrop-filter:blur(15px);
+  -webkit-backdrop-filter:blur(15px);
+}
+
+.card img{
+  width:100%;
+  height:280px;
+  object-fit:cover;
+}
+
+.card-content{
+  padding:24px;
+}
+
+section{
+  padding:90px 7%;
+}
+
+.section-title{
+  text-align:center;
+  font-size:2.7rem;
+  margin-bottom:55px;
+  font-weight:800;
+}
+
+.section-title span{
+  background:linear-gradient(90deg,#2ea0ff,#ff004f);
+  -webkit-background-clip:text;
+  -webkit-text-fill-color:transparent;
+}
+
+.features{
+  display:grid;
+  grid-template-columns:repeat(auto-fit,minmax(250px,1fr));
+  gap:25px;
+}
+
+.feature-box{
+  background:rgba(255,255,255,0.05);
+  border:1px solid rgba(255,255,255,0.08);
+  border-radius:24px;
+  padding:35px 25px;
+  transition:0.4s;
+  backdrop-filter:blur(12px);
+  -webkit-backdrop-filter:blur(12px);
+}
+
+.feature-icon{
+  width:70px;
+  height:70px;
+  border-radius:18px;
+  background:linear-gradient(135deg,#0077ff,#ff004f);
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  font-size:1.7rem;
+  margin-bottom:22px;
+}
+
+.upload-area{
+  background:rgba(255,255,255,0.05);
+  border:2px dashed rgba(255,255,255,0.15);
+  border-radius:25px;
+  padding:50px;
+  text-align:center;
+  backdrop-filter:blur(10px);
+  -webkit-backdrop-filter:blur(10px);
+}
+
+.upload-btn{
+  display:inline-block;
+  padding:15px 30px;
+  border-radius:16px;
+  background:linear-gradient(90deg,#0077ff,#ff004f);
+  cursor:pointer;
+  font-weight:600;
+}
+
+input[type="file"]{
+  display:none;
+}
+
+.movies-grid{
+  display:grid;
+  grid-template-columns:repeat(auto-fit,minmax(220px,1fr));
+  gap:25px;
+  margin-top:45px;
+}
+
+.movie-card{
+  background:rgba(255,255,255,0.05);
+  border-radius:22px;
+  overflow:hidden;
+  border:1px solid rgba(255,255,255,0.07);
+  transition:0.4s;
+  backdrop-filter:blur(12px);
+  -webkit-backdrop-filter:blur(12px);
+}
+
+.movie-card img{
+  width:100%;
+  height:300px;
+  object-fit:cover;
+}
+
+.movie-info{
+  padding:18px;
+}
+
+.movie-info p{
+  color:#8c8ca1;
+  margin-top:5px;
+  margin-bottom:15px;
+}
+
+.movie-actions-group{
+  display:flex;
+  gap:10px;
+}
+
+.watch-btn,
+.download-btn-inline{
+  flex:1;
+  padding:12px;
+  border:none;
+  border-radius:12px;
+  color:#fff;
+  font-weight:600;
+  cursor:pointer;
+  text-align:center;
+  text-decoration:none;
+}
+
+.watch-btn{
+  background:linear-gradient(90deg,#0077ff,#ff004f);
+}
+
+.download-btn-inline{
+  border:1px solid #ff004f;
+  color:#ff004f;
+}
+
+.contact{
+  text-align:center;
+  background:rgba(255,255,255,0.04);
+  border-radius:30px;
+  padding:55px 30px;
+}
+
+footer{
+  text-align:center;
+  padding:30px;
+  color:#8c8ca1;
+  border-top:1px solid rgba(255,255,255,0.08);
+  margin-top:60px;
+}
+
+@media(max-width:900px){
+
+  header{
+    flex-direction:column;
+    gap:12px;
+    padding:14px 5%;
+  }
+
+  nav{
+    width:100%;
+    justify-content:center;
+    gap:10px;
+  }
+
+  nav a{
+    margin-left:0;
+    font-size:0.9rem;
+  }
+
+  .hero{
+    flex-direction:column;
+    text-align:center;
+    padding:160px 5% 60px;
+  }
+
+  .hero-text h1{
+    font-size:2.4rem;
+  }
+
+  .hero-text p{
+    font-size:0.95rem;
+  }
+
+  .btns{
+    justify-content:center;
+  }
+
+  .movies-grid{
+    grid-template-columns:1fr;
+  }
+
+  .movie-card img{
+    height:260px;
+  }
+
+  .movie-actions-group{
+    flex-direction:column;
+  }
+
+  .upload-area{
+    padding:30px 20px;
+  }
+
+  .section-title{
+    font-size:2rem;
+  }
+}
+
+</style>
 </head>
+
 <body>
 
-  <header>
-    <div class="logo"><div class="logo-icon">▶</div>CINEFLEX</div>
-    <nav id="navbarLinks">
-      <a href="#home">Home</a>
-      <a href="#features">Features</a>
-      <a href="#movies">Movies</a>
-      <a href="#adminSection" id="dashMenuLink" style="display:none; color:#0077ff; font-weight:600;">Dashboard</a>
-      <a href="#upload">Upload</a>
-      <a href="#contact">Contact</a>
-      <span id="authStatus">
-        <a href="login.html">Login</a>
-        <a href="signup.html">Signup</a>
-      </span>
-    </nav>
-  </header>
+<header>
 
-  <section class="hero" id="home">
-    <div class="hero-text">
-      <h1>Unlimited Movies & TV Series With <span>CINEFLEX</span></h1>
-      <p>Experience a futuristic streaming platform with modern UI animations, smooth interactions, movie uploads, streaming support, and stylish design.</p>
-      <div class="btns">
-        <a href="#movies" class="btn primary">Explore Movies</a>
-        <a href="#upload" class="btn secondary">Upload Content</a>
-      </div>
-    </div>
-    <div class="hero-card">
-      <div class="card">
-        <img src="https://images.unsplash.com/photo-1489599849927-2ee91cede3ba?q=80&w=1200" alt="Cinema">
-        <div class="card-content">
-          <h2>Next Generation Streaming</h2>
-          <p>Blue & red neon themed cinematic experience with elegant animations and premium design.</p>
-          <a href="#features" class="btn primary">Learn More</a>
-        </div>
-      </div>
-    </div>
-  </section>
+<div class="logo">
+<div class="logo-icon">▶</div>
+CINEFLEX
+</div>
 
-  <section id="adminSection" style="display:none; padding-top: 120px;">
-    <h2 class="section-title">⚡ <span>CINEFLEX Admin Dashboard</span></h2>
-    <div class="admin-wrapper">
-      <div class="admin-container">
-        <h3 id="formTitle">Add New Movie</h3>
-        <div class="input-group"><input type="text" id="movieTitle" placeholder="Movie Title"></div>
-        <div class="input-group"><input type="text" id="movieGenre" placeholder="Genre (e.g. Action • Sci-Fi)"></div>
-        <div class="input-group"><input type="text" id="movieImg" placeholder="Image URL (Unsplash Link)"></div>
-        <div class="input-group"><input type="text" id="movieLink" placeholder="Watch / Stream URL"></div>
-        <div class="input-group"><input type="text" id="movieDownload" placeholder="Direct Download URL"></div>
-        <button class="admin-add-btn" id="submitFormBtn" onclick="saveMovieFromDash()">Add Movie</button>
-        <div id="statusMsg" class="status-success">✔ Movie Action Successful!</div>
-      </div>
-      <div class="admin-container">
-        <h3>📝 Manage Uploaded Movies</h3>
-        <div id="adminMoviesList" style="max-height: 350px; overflow-y: auto;"></div>
-      </div>
-    </div>
-  </section>
+<nav>
+<a href="#home">Home</a>
+<a href="#features">Features</a>
+<a href="#upload">Upload</a>
+<a href="#movies">Movies</a>
+<a href="#contact">Contact</a>
+</nav>
 
-  <section id="features">
-    <h2 class="section-title">Why Choose <span>CINEFLEX</span></h2>
-    <div class="features">
-      <div class="feature-box"><div class="feature-icon">🎬</div><h3>Movie Streaming</h3><p>Watch movies online with a smooth responsive cinematic interface.</p></div>
-      <div class="feature-box"><div class="feature-icon">⚡</div><h3>Fast Performance</h3><p>Optimized lightweight structure using pure HTML, CSS & JS.</p></div>
-      <div class="feature-box"><div class="feature-icon">📥</div><h3>Upload System</h3><p>Upload legally owned videos quickly with an elegant upload section.</p></div>
-      <div class="feature-box"><div class="feature-icon">✨</div><h3>Modern Animations</h3><p>Glassmorphism effects, gradients, hover transitions, and visuals.</p></div>
-    </div>
-  </section>
+</header>
 
-  <section id="upload">
-    <h2 class="section-title">Upload Your <span>Content</span></h2>
-    <div class="upload-area">
-      <h3>Upload Movies or TV Series</h3>
-      <p>Select a video file to preview it instantly on your streaming website.</p>
-      <label for="movieUpload" class="upload-btn">Choose Video</label>
-      <input type="file" id="movieUpload" accept="video/*">
-      <div id="previewContainer" style="margin-top:35px;"></div>
-    </div>
-  </section>
+<section class="hero" id="home">
 
-  <section id="movies">
-    <h2 class="section-title">Trending <span>Movies</span></h2>
-    <div class="movies-grid" id="mainMoviesGrid"></div>
-  </section>
+<div class="hero-text">
+<h1>Unlimited Movies With <span>CINEFLEX</span></h1>
 
-  <section id="contact">
-    <div class="contact">
-      <h2>Contact CINEFLEX</h2>
-      <p>Need a custom streaming platform or collaboration?</p>
-      <p><strong>Email:</strong> chandisadeepanasw2006@gmail.com</p>
-      <p><strong>Phone:</strong> +94 74 076 3802</p>
-    </div>
-  </section>
+<p>
+Experience futuristic movie streaming with responsive design,
+mobile support, animations and smooth performance.
+</p>
 
-  <footer>© 2026 CINEFLEX. All Rights Reserved.</footer>
+<div class="btns">
+<a href="#movies" class="btn primary">Explore Movies</a>
+<a href="#upload" class="btn secondary">Upload Content</a>
+</div>
 
-  <script>
-    let currentEditingIndex = -1;
+</div>
 
-    // 🎬 1. Local Storage Setup
-    function initializeMovies() {
-        const defaultMovies = [
-            { title: "Man vs Baby", genre: "Comedy/Family", img: "https://images.unsplash.com/photo-1608889174637-3c44f6326f20?q=80&w=400", link: "#", download: "#" },
-            { title: "Cyber Future", genre: "Action • Sci‑Fi", img: "https://images.unsplash.com/photo-1534447677768-be436bb09401?q=80&w=400", link: "#", download: "#" },
-            { title: "Shadow World", genre: "Thriller • Mystery", img: "https://images.unsplash.com/photo-1478760329108-5c3ed9d495a0?q=80&w=400", link: "#", download: "#" },
-            { title: "Dream Escape", genre: "Adventure • Fantasy", img: "https://images.unsplash.com/photo-1509198397868-475647b2a1e5?q=80&w=400", link: "#", download: "#" },
-            { title: "Last Horizon", genre: "Sci-Fi | Action", img: "https://images.unsplash.com/photo-1451187580459-43490279c0fa?q=80&w=400", link: "#", download: "#" }
-        ];
+<div class="hero-card">
 
-        if (!localStorage.getItem('movies')) {
-            localStorage.setItem('movies', JSON.stringify(defaultMovies));
-        }
-    }
+<div class="card">
 
-    // 🔗 2. Load Movies
-    function loadMainMovies() {
-        const allMovies = JSON.parse(localStorage.getItem('movies')) || [];
-        const grid = document.getElementById('mainMoviesGrid');
-        grid.innerHTML = '';
-        
-        allMovies.forEach(m => {
-            const movieLink = m.link ? m.link : '#';
-            let downloadButtonHTML = `<a href="${m.download && m.download !== '#' ? m.download : movieLink}" target="_blank" class="download-btn-inline">Download</a>`;
+<img src="https://images.unsplash.com/photo-1489599849927-2ee91cede3ba?q=80&w=1200" alt="Cinema">
 
-            grid.innerHTML += `
-              <div class="movie-card">
-                <img src="${m.img}" alt="Poster" onerror="this.src='https://images.unsplash.com/photo-1489599849927-2ee91cede3ba?q=80&w=400'">
-                <div class="movie-info">
-                  <div>
-                    <h4>${m.title}</h4>
-                    <p>${m.genre}</p>
-                  </div>
-                  <div class="movie-actions-group">
-                    <a href="${movieLink}" target="_blank" class="watch-btn">Watch Now</a>
-                    ${downloadButtonHTML}
-                  </div>
-                </div>
-              </div>
-            `;
-        });
-    }
+<div class="card-content">
+<h2>Next Generation Streaming</h2>
 
-    // 🔒 3. Auth Status Control
-    function checkAuthStatus() {
-        const loggedInUser = JSON.parse(localStorage.getItem('loggedInUser'));
-        const authStatusContainer = document.getElementById('authStatus');
-        const adminSection = document.getElementById('adminSection');
-        const dashMenuLink = document.getElementById('dashMenuLink');
+<p>
+Modern cinematic experience with smooth UI and animations.
+</p>
 
-        if(loggedInUser) {
-            if(loggedInUser.role === 'admin') {
-                adminSection.style.display = 'block';
-                dashMenuLink.style.display = 'inline-block';
-                renderAdminMovieList(); 
-            }
-            authStatusContainer.innerHTML = `
-                <span class="user-tag">👋 ${loggedInUser.name}</span>
-                <a onclick="logout()" class="logout-link">Logout</a>
-            `;
-        } else {
-            adminSection.style.display = 'none';
-            dashMenuLink.style.display = 'none';
-        }
-    }
+<a href="#features" class="btn primary">Learn More</a>
 
-    // 📝 4. Admin Movie List
-    function renderAdminMovieList() {
-        const allMovies = JSON.parse(localStorage.getItem('movies')) || [];
-        const container = document.getElementById('adminMoviesList');
-        
-        if(allMovies.length === 0) {
-            container.innerHTML = '<p style="color:#6e7282; font-size:0.95rem;">No movies available.</p>';
-            return;
-        }
+</div>
+</div>
+</div>
+</section>
 
-        let tableHTML = `<table class="manage-table">`;
-        allMovies.forEach((movie, index) => {
-            tableHTML += `
-                <tr>
-                    <td>
-                        <span style="font-weight:600; display:block;">${movie.title}</span>
-                        <span style="font-size:0.8rem; color:#8c8ca1;">${movie.genre}</span>
-                    </td>
-                    <td>
-                        <div class="action-btns">
-                            <button class="edit-inline-btn" onclick="startEditMovie(${index})">Edit</button>
-                            <button class="delete-inline-btn" onclick="deleteMovie(${index})">Delete</button>
-                        </div>
-                    </td>
-                </tr>
-            `;
-        });
-        tableHTML += `</table>`;
-        container.innerHTML = tableHTML;
-    }
+<section id="features">
 
-    // ✍ 5. Edit Movie Setup
-    function startEditMovie(index) {
-        const allMovies = JSON.parse(localStorage.getItem('movies')) || [];
-        const movie = allMovies[index];
+<h2 class="section-title">
+Why Choose <span>CINEFLEX</span>
+</h2>
 
-        document.getElementById('movieTitle').value = movie.title;
-        document.getElementById('movieGenre').value = movie.genre;
-        document.getElementById('movieImg').value = movie.img;
-        document.getElementById('movieLink').value = movie.link && movie.link !== '#' ? movie.link : '';
-        document.getElementById('movieDownload').value = movie.download && movie.download !== '#' ? movie.download : '';
+<div class="features">
 
-        currentEditingIndex = index;
-        document.getElementById('formTitle').innerText = "✍ Edit Movie Content";
-        document.getElementById('submitFormBtn').innerText = "Update Movie";
-        document.getElementById('submitFormBtn').style.background = "linear-gradient(90deg, #00ff77, #0077ff)";
+<div class="feature-box">
+<div class="feature-icon">🎬</div>
+<h3>Streaming</h3>
+<p>Watch movies online smoothly.</p>
+</div>
 
-        window.scrollTo({ top: document.getElementById('adminSection').offsetTop - 80, behavior: 'smooth' });
-    }
+<div class="feature-box">
+<div class="feature-icon">⚡</div>
+<h3>Fast</h3>
+<p>Optimized performance on all devices.</p>
+</div>
 
-    // 💾 6. Save or Update Movie
-    function saveMovieFromDash() {
-        const title = document.getElementById('movieTitle').value.trim();
-        const genre = document.getElementById('movieGenre').value.trim();
-        const img = document.getElementById('movieImg').value.trim();
-        const link = document.getElementById('movieLink').value.trim();
-        const download = document.getElementById('movieDownload').value.trim();
+<div class="feature-box">
+<div class="feature-icon">📥</div>
+<h3>Upload</h3>
+<p>Upload your own videos instantly.</p>
+</div>
 
-        if (title === "" || genre === "") {
-            alert("Please enter Movie Title and Genre!");
-            return;
-        }
+<div class="feature-box">
+<div class="feature-icon">✨</div>
+<h3>Modern UI</h3>
+<p>Glassmorphism and modern effects.</p>
+</div>
 
-        const movieObj = {
-            title: title,
-            genre: genre,
-            img: img ? img : "https://images.unsplash.com/photo-1489599849927-2ee91cede3ba?q=80&w=400",
-            link: link ? link : "#",
-            download: download ? download : "#"
-        };
+</div>
 
-        let allMovies = JSON.parse(localStorage.getItem('movies')) || [];
+</section>
 
-        if (currentEditingIndex === -1) {
-            allMovies.unshift(movieObj);
-        } else {
-            allMovies[currentEditingIndex] = movieObj;
-            currentEditingIndex = -1;
-            document.getElementById('formTitle').innerText = "Add New Movie";
-            document.getElementById('submitFormBtn').innerText = "Add Movie";
-            document.getElementById('submitFormBtn').style.background = "#0077ff";
-        }
+<section id="upload">
 
-        localStorage.setItem('movies', JSON.stringify(allMovies));
+<h2 class="section-title">
+Upload <span>Content</span>
+</h2>
 
-        loadMainMovies();
-        renderAdminMovieList();
+<div class="upload-area">
 
-        document.getElementById('movieTitle').value = '';
-        document.getElementById('movieGenre').value = '';
-        document.getElementById('movieImg').value = '';
-        document.getElementById('movieLink').value = '';
-        document.getElementById('movieDownload').value = '';
+<h3>Upload Movies or TV Series</h3>
 
-        const statusMsg = document.getElementById('statusMsg');
-        statusMsg.style.display = 'block';
-        setTimeout(() => { statusMsg.style.display = 'none'; }, 3000);
-    }
+<p>Select video file to preview instantly.</p>
 
-    // ❌ 7. Delete Movie
-    function deleteMovie(index) {
-        if(confirm("Are you sure you want to delete this movie?")) {
-            let allMovies = JSON.parse(localStorage.getItem('movies')) || [];
-            allMovies.splice(index, 1);
-            localStorage.setItem('movies', JSON.stringify(allMovies));
-            loadMainMovies();
-            renderAdminMovieList();
-        }
-    }
+<label for="movieUpload" class="upload-btn">
+Choose Video
+</label>
 
-    function logout() {
-        localStorage.removeItem('loggedInUser');
-        window.location.reload();
-    }
+<input type="file" id="movieUpload" accept="video/*">
 
-    // 📥 Video Upload & Direct Auto Update Function
-    const uploadInput = document.getElementById('movieUpload');
-    const previewContainer = document.getElementById('previewContainer');
-    
-    if(uploadInput) {
-        uploadInput.addEventListener('change', function(){
-          const file = this.files[0];
-          if(file){
-            const videoURL = URL.createObjectURL(file);
-            
-            // 1. සෙක්ෂන් එකේ වීඩියෝ එක ප්ලේ කරන්න දානවා
-            previewContainer.innerHTML = `
-              <video controls autoplay style="width:100%; max-width:850px; border-radius:22px;">
-                <source src="${videoURL}" type="${file.type}">
-              </video>
-              <p style="margin-top:18px; color:#00ff77; font-weight:500;">✔ Previewing & Added to List: ${file.name}</p>
-            `;
+<div id="previewContainer" style="margin-top:35px;"></div>
 
-            // 2. වීඩියෝ ෆයිල් එකේ නම Clean කරලා අරගන්නවා (.mp4, .mkv වගේ ඒවා අයින් කරලා)
-            let cleanedTitle = file.name.replace(/\.[^/.]+$/, "");
+</div>
 
-            // 3. අලුත් Movie Object එකක් හදනවා
-            const newUploadedMovie = {
-                title: cleanedTitle,
-                genre: "Local Video File",
-                img: "https://images.unsplash.com/photo-1489599849927-2ee91cede3ba?q=80&w=400", // Default Unsplash poster
-                link: videoURL, // ක්ලික් කරපු ගමන් ප්ලේ වෙන්න ලෝකල් බ්ලොබ් යූආර්එල් එක දෙනවා
-                download: "#"
-            };
+</section>
 
-            // 4. Local Storage එකට උඩින්ම ඇඩ් කරනවා
-            let allMovies = JSON.parse(localStorage.getItem('movies')) || [];
-            allMovies.unshift(newUploadedMovie);
-            localStorage.setItem('movies', JSON.stringify(allMovies));
+<section id="movies">
 
-            // 5. සයිට් එකේ ලිස්ට් රීලෝඩ් කරනවා සැනෙකින් පේන්න
-            loadMainMovies();
-            if(JSON.parse(localStorage.getItem('loggedInUser'))?.role === 'admin') {
-                renderAdminMovieList();
-            }
+<h2 class="section-title">
+Trending <span>Movies</span>
+</h2>
 
-            // 6. කෙලින්ම Trending Movies සෙක්ෂන් එකට ස්ක්‍රෝල් කරලා පෙන්වනවා
-            setTimeout(() => {
-                window.scrollTo({ top: document.getElementById('movies').offsetTop - 70, behavior: 'smooth' });
-            }, 1500);
-          }
-        });
-    }
+<div class="movies-grid" id="mainMoviesGrid"></div>
 
-    // ⚡ Fix Fixed Header Jump/Refresh Loops for Mobile Menu
-    document.querySelectorAll('nav a, .btns a').forEach(link => {
-        link.addEventListener('click', function(e) {
-            const targetId = this.getAttribute('href');
-            if(targetId && targetId.startsWith('#')) {
-                e.preventDefault();
-                const targetElement = document.querySelector(targetId);
-                if(targetElement) {
-                    window.scrollTo({
-                        top: targetElement.offsetTop - 75,
-                        behavior: 'smooth'
-                    });
-                }
-            }
-        });
-    });
+</section>
 
-    // Scroll Animations
-    const revealElements = document.querySelectorAll('.feature-box, .movie-card, .upload-area, .contact');
-    const revealOnScroll = () => {
-      revealElements.forEach(el => {
-        const windowHeight = window.innerHeight;
-        const elementTop = el.getBoundingClientRect().top;
-        if(elementTop < windowHeight - 100){
-          el.style.opacity = '1';
-          el.style.transform = 'translateY(0px)';
-          el.style.transition = 'all 0.8s ease';
-        }
-      });
-    }
-    
-    revealElements.forEach(el => { el.style.opacity = '0'; el.style.transform = 'translateY(40px)'; });
-    window.addEventListener('scroll', revealOnScroll);
-    
-    // Run Init
-    initializeMovies();
-    loadMainMovies();
-    checkAuthStatus();
-    setTimeout(revealOnScroll, 300); 
-  </script>
+<section id="contact">
+
+<div class="contact">
+
+<h2>Contact CINEFLEX</h2>
+
+<p>Email: chandisadeepanasw2006@gmail.com</p>
+
+<p>Phone: +94 74 076 3802</p>
+
+</div>
+
+</section>
+
+<footer>
+© 2026 CINEFLEX. All Rights Reserved.
+</footer>
+
+<script>
+
+const movies = [
+
+{
+title:"Cyber Future",
+genre:"Action • Sci-Fi",
+img:"https://images.unsplash.com/photo-1534447677768-be436bb09401?q=80&w=400",
+link:"#"
+},
+
+{
+title:"Shadow World",
+genre:"Thriller • Mystery",
+img:"https://images.unsplash.com/photo-1478760329108-5c3ed9d495a0?q=80&w=400",
+link:"#"
+},
+
+{
+title:"Dream Escape",
+genre:"Adventure • Fantasy",
+img:"https://images.unsplash.com/photo-1509198397868-475647b2a1e5?q=80&w=400",
+link:"#"
+}
+
+];
+
+const grid=document.getElementById('mainMoviesGrid');
+
+function loadMovies(){
+
+grid.innerHTML='';
+
+movies.forEach(m=>{
+
+grid.innerHTML+=`
+
+<div class="movie-card">
+
+<img loading="lazy" src="${m.img}" alt="Poster">
+
+<div class="movie-info">
+
+<h4>${m.title}</h4>
+
+<p>${m.genre}</p>
+
+<div class="movie-actions-group">
+
+<a href="${m.link}" class="watch-btn">
+Watch
+</a>
+
+<a href="${m.link}" class="download-btn-inline">
+Download
+</a>
+
+</div>
+
+</div>
+
+</div>
+
+`;
+
+});
+
+}
+
+loadMovies();
+
+const uploadInput=document.getElementById('movieUpload');
+
+const previewContainer=document.getElementById('previewContainer');
+
+uploadInput.addEventListener('change',function(){
+
+const file=this.files[0];
+
+if(file){
+
+const videoURL=URL.createObjectURL(file);
+
+previewContainer.innerHTML=`
+
+<video controls autoplay
+style="width:100%;max-width:850px;border-radius:22px;">
+
+<source src="${videoURL}" type="${file.type}">
+
+</video>
+
+<p style="margin-top:18px;color:#00ff77;">
+✔ Uploaded : ${file.name}
+</p>
+
+`;
+
+let cleanedTitle=file.name.replace(/\.[^/.]+$/, "");
+
+movies.unshift({
+
+title:cleanedTitle,
+genre:"Uploaded Video",
+img:"https://images.unsplash.com/photo-1489599849927-2ee91cede3ba?q=80&w=400",
+link:videoURL
+
+});
+
+loadMovies();
+
+setTimeout(()=>{
+
+window.scrollTo({
+
+top:document.getElementById('movies').offsetTop-70,
+behavior:'smooth'
+
+});
+
+},1000);
+
+}
+
+});
+
+document.querySelectorAll('nav a, .btns a').forEach(link=>{
+
+link.addEventListener('click',function(e){
+
+const targetId=this.getAttribute('href');
+
+if(targetId.startsWith('#')){
+
+e.preventDefault();
+
+const target=document.querySelector(targetId);
+
+if(target){
+
+const y=
+target.getBoundingClientRect().top+
+window.pageYOffset-80;
+
+window.scrollTo({
+
+top:y,
+behavior:'smooth'
+
+});
+
+}
+
+}
+
+});
+
+});
+
+</script>
+
 </body>
 </html>
