@@ -1,420 +1,305 @@
+<!-- FULL RESPONSIVE ADMIN VERSION -->
+<!-- SAVE AS index.html -->
+
 <!DOCTYPE html>
 <html lang="en">
 <head>
-<meta charset="UTF-8" />
-<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-<title>CINEFLEX | Ultimate Streaming Experience</title>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>CINEFLEX</title>
 
 <link rel="preconnect" href="https://fonts.googleapis.com">
-<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
 
 <style>
 
 *{
-  margin:0;
-  padding:0;
-  box-sizing:border-box;
-  font-family:'Poppins',sans-serif;
+margin:0;
+padding:0;
+box-sizing:border-box;
+font-family:'Poppins',sans-serif;
 }
 
 html{
-  scroll-behavior:smooth;
+scroll-behavior:smooth;
 }
 
 body{
-  background:#050816;
-  color:#fff;
-  overflow-x:hidden;
-  width:100%;
+background:#050816;
+color:#fff;
+overflow-x:hidden;
 }
 
 img{
-  max-width:100%;
-  display:block;
-}
-
-video{
-  max-width:100%;
-}
-
-a,button{
-  -webkit-tap-highlight-color:transparent;
-}
-
-body::before{
-  content:'';
-  position:fixed;
-  width:500px;
-  height:500px;
-  background:rgba(0,123,255,0.25);
-  filter:blur(120px);
-  top:-100px;
-  left:-100px;
-  z-index:-1;
-}
-
-body::after{
-  content:'';
-  position:fixed;
-  width:500px;
-  height:500px;
-  background:rgba(255,0,76,0.22);
-  filter:blur(120px);
-  bottom:-150px;
-  right:-100px;
-  z-index:-1;
+max-width:100%;
+display:block;
 }
 
 header{
-  position:fixed;
-  width:100%;
-  top:0;
-  left:0;
-  display:flex;
-  justify-content:space-between;
-  align-items:center;
-  padding:18px 7%;
-  backdrop-filter:blur(15px);
-  -webkit-backdrop-filter:blur(15px);
-  background:rgba(10,10,25,0.45);
-  border-bottom:1px solid rgba(255,255,255,0.08);
-  z-index:1000;
+position:fixed;
+top:0;
+left:0;
+width:100%;
+display:flex;
+justify-content:space-between;
+align-items:center;
+padding:18px 7%;
+background:rgba(0,0,0,0.5);
+backdrop-filter:blur(15px);
+-webkit-backdrop-filter:blur(15px);
+z-index:999;
 }
 
 .logo{
-  display:flex;
-  align-items:center;
-  gap:12px;
-  font-size:1.8rem;
-  font-weight:800;
-  letter-spacing:1px;
-  background:linear-gradient(90deg,#2ea0ff,#ff004f);
-  -webkit-background-clip:text;
-  -webkit-text-fill-color:transparent;
-}
-
-.logo-icon{
-  width:48px;
-  height:48px;
-  border-radius:14px;
-  background:linear-gradient(135deg,#008cff,#ff004f);
-  display:flex;
-  justify-content:center;
-  align-items:center;
-  color:#fff;
-  font-size:1.4rem;
-  box-shadow:0 0 30px rgba(0,140,255,0.5);
+font-size:1.8rem;
+font-weight:800;
+background:linear-gradient(90deg,#2ea0ff,#ff004f);
+-webkit-background-clip:text;
+-webkit-text-fill-color:transparent;
 }
 
 nav{
-  display:flex;
-  align-items:center;
-  flex-wrap:wrap;
+display:flex;
+gap:20px;
+flex-wrap:wrap;
 }
 
 nav a{
-  color:#fff;
-  text-decoration:none;
-  margin-left:28px;
-  font-weight:500;
-  transition:0.3s;
-}
-
-nav a:hover{
-  color:#2ea0ff;
+color:#fff;
+text-decoration:none;
+font-weight:500;
 }
 
 .hero{
-  min-height:100vh;
-  display:flex;
-  align-items:center;
-  justify-content:space-between;
-  padding:140px 7% 70px;
-  gap:50px;
+min-height:100vh;
+display:flex;
+justify-content:center;
+align-items:center;
+flex-direction:column;
+padding:140px 7% 80px;
+text-align:center;
 }
 
-.hero-text{
-  flex:1;
+.hero h1{
+font-size:4rem;
+margin-bottom:20px;
 }
 
-.hero-text h1{
-  font-size:4rem;
-  line-height:1.1;
-  margin-bottom:20px;
+.hero h1 span{
+background:linear-gradient(90deg,#2ea0ff,#ff004f);
+-webkit-background-clip:text;
+-webkit-text-fill-color:transparent;
 }
 
-.hero-text h1 span{
-  background:linear-gradient(90deg,#2ea0ff,#ff004f);
-  -webkit-background-clip:text;
-  -webkit-text-fill-color:transparent;
-}
-
-.hero-text p{
-  color:#c7c7d6;
-  font-size:1.05rem;
-  line-height:1.8;
-  margin-bottom:30px;
-  max-width:650px;
-}
-
-.btns{
-  display:flex;
-  gap:18px;
-  flex-wrap:wrap;
+.hero p{
+max-width:700px;
+line-height:1.8;
+color:#c7c7d6;
+margin-bottom:30px;
 }
 
 .btn{
-  padding:14px 28px;
-  border:none;
-  border-radius:14px;
-  cursor:pointer;
-  font-size:1rem;
-  font-weight:600;
-  transition:0.4s;
-  text-decoration:none;
-  display:inline-flex;
-  align-items:center;
-  gap:10px;
-}
-
-.primary{
-  background:linear-gradient(90deg,#0077ff,#ff004f);
-  color:#fff;
-}
-
-.secondary{
-  border:1px solid rgba(255,255,255,0.15);
-  background:rgba(255,255,255,0.04);
-  color:#fff;
-}
-
-.hero-card{
-  flex:1;
-  display:flex;
-  justify-content:center;
-}
-
-.card{
-  width:100%;
-  max-width:480px;
-  background:rgba(255,255,255,0.06);
-  border:1px solid rgba(255,255,255,0.08);
-  border-radius:28px;
-  overflow:hidden;
-  backdrop-filter:blur(15px);
-  -webkit-backdrop-filter:blur(15px);
-}
-
-.card img{
-  width:100%;
-  height:280px;
-  object-fit:cover;
-}
-
-.card-content{
-  padding:24px;
+padding:14px 28px;
+border-radius:14px;
+background:linear-gradient(90deg,#0077ff,#ff004f);
+text-decoration:none;
+color:#fff;
+font-weight:600;
+display:inline-block;
 }
 
 section{
-  padding:90px 7%;
+padding:90px 7%;
 }
 
 .section-title{
-  text-align:center;
-  font-size:2.7rem;
-  margin-bottom:55px;
-  font-weight:800;
+text-align:center;
+font-size:2.7rem;
+margin-bottom:50px;
 }
 
 .section-title span{
-  background:linear-gradient(90deg,#2ea0ff,#ff004f);
-  -webkit-background-clip:text;
-  -webkit-text-fill-color:transparent;
+background:linear-gradient(90deg,#2ea0ff,#ff004f);
+-webkit-background-clip:text;
+-webkit-text-fill-color:transparent;
 }
 
-.features{
-  display:grid;
-  grid-template-columns:repeat(auto-fit,minmax(250px,1fr));
-  gap:25px;
-}
-
-.feature-box{
-  background:rgba(255,255,255,0.05);
-  border:1px solid rgba(255,255,255,0.08);
-  border-radius:24px;
-  padding:35px 25px;
-  transition:0.4s;
-  backdrop-filter:blur(12px);
-  -webkit-backdrop-filter:blur(12px);
-}
-
-.feature-icon{
-  width:70px;
-  height:70px;
-  border-radius:18px;
-  background:linear-gradient(135deg,#0077ff,#ff004f);
-  display:flex;
-  align-items:center;
-  justify-content:center;
-  font-size:1.7rem;
-  margin-bottom:22px;
-}
-
-.upload-area{
-  background:rgba(255,255,255,0.05);
-  border:2px dashed rgba(255,255,255,0.15);
-  border-radius:25px;
-  padding:50px;
-  text-align:center;
-  backdrop-filter:blur(10px);
-  -webkit-backdrop-filter:blur(10px);
+.upload-area,
+.admin-container{
+background:rgba(255,255,255,0.05);
+padding:35px;
+border-radius:24px;
+backdrop-filter:blur(12px);
+-webkit-backdrop-filter:blur(12px);
+border:1px solid rgba(255,255,255,0.08);
+margin-bottom:30px;
 }
 
 .upload-btn{
-  display:inline-block;
-  padding:15px 30px;
-  border-radius:16px;
-  background:linear-gradient(90deg,#0077ff,#ff004f);
-  cursor:pointer;
-  font-weight:600;
+display:inline-block;
+padding:14px 28px;
+background:linear-gradient(90deg,#0077ff,#ff004f);
+border-radius:14px;
+cursor:pointer;
+font-weight:600;
+margin-top:20px;
 }
 
 input[type="file"]{
-  display:none;
+display:none;
 }
 
 .movies-grid{
-  display:grid;
-  grid-template-columns:repeat(auto-fit,minmax(220px,1fr));
-  gap:25px;
-  margin-top:45px;
+display:grid;
+grid-template-columns:repeat(auto-fit,minmax(220px,1fr));
+gap:25px;
+margin-top:40px;
 }
 
 .movie-card{
-  background:rgba(255,255,255,0.05);
-  border-radius:22px;
-  overflow:hidden;
-  border:1px solid rgba(255,255,255,0.07);
-  transition:0.4s;
-  backdrop-filter:blur(12px);
-  -webkit-backdrop-filter:blur(12px);
+background:rgba(255,255,255,0.05);
+border-radius:20px;
+overflow:hidden;
+border:1px solid rgba(255,255,255,0.07);
 }
 
 .movie-card img{
-  width:100%;
-  height:300px;
-  object-fit:cover;
+width:100%;
+height:300px;
+object-fit:cover;
 }
 
 .movie-info{
-  padding:18px;
+padding:18px;
 }
 
 .movie-info p{
-  color:#8c8ca1;
-  margin-top:5px;
-  margin-bottom:15px;
+color:#aaa;
+margin-top:6px;
+margin-bottom:15px;
 }
 
-.movie-actions-group{
-  display:flex;
-  gap:10px;
+.movie-actions{
+display:flex;
+gap:10px;
 }
 
 .watch-btn,
-.download-btn-inline{
-  flex:1;
-  padding:12px;
-  border:none;
-  border-radius:12px;
-  color:#fff;
-  font-weight:600;
-  cursor:pointer;
-  text-align:center;
-  text-decoration:none;
+.download-btn{
+flex:1;
+padding:12px;
+text-align:center;
+border-radius:10px;
+text-decoration:none;
+font-weight:600;
 }
 
 .watch-btn{
-  background:linear-gradient(90deg,#0077ff,#ff004f);
+background:#0077ff;
+color:#fff;
 }
 
-.download-btn-inline{
-  border:1px solid #ff004f;
-  color:#ff004f;
+.download-btn{
+border:1px solid #ff004f;
+color:#ff004f;
 }
 
-.contact{
-  text-align:center;
-  background:rgba(255,255,255,0.04);
-  border-radius:30px;
-  padding:55px 30px;
+.input-group{
+margin-bottom:20px;
+}
+
+.input-group input{
+width:100%;
+padding:15px;
+border-radius:12px;
+border:none;
+background:#101528;
+color:#fff;
+}
+
+.admin-btn{
+width:100%;
+padding:15px;
+border:none;
+border-radius:12px;
+background:#0077ff;
+color:#fff;
+font-weight:600;
+cursor:pointer;
+}
+
+.manage-item{
+display:flex;
+justify-content:space-between;
+align-items:center;
+padding:15px 0;
+border-bottom:1px solid rgba(255,255,255,0.08);
+gap:15px;
+}
+
+.manage-buttons{
+display:flex;
+gap:10px;
+}
+
+.edit-btn,
+.delete-btn{
+padding:8px 14px;
+border:none;
+border-radius:8px;
+cursor:pointer;
+font-weight:600;
+}
+
+.edit-btn{
+background:#0077ff;
+color:#fff;
+}
+
+.delete-btn{
+background:#ff004f;
+color:#fff;
 }
 
 footer{
-  text-align:center;
-  padding:30px;
-  color:#8c8ca1;
-  border-top:1px solid rgba(255,255,255,0.08);
-  margin-top:60px;
+text-align:center;
+padding:30px;
+color:#888;
 }
 
 @media(max-width:900px){
 
-  header{
-    flex-direction:column;
-    gap:12px;
-    padding:14px 5%;
-  }
+header{
+flex-direction:column;
+gap:12px;
+padding:14px 5%;
+}
 
-  nav{
-    width:100%;
-    justify-content:center;
-    gap:10px;
-  }
+nav{
+justify-content:center;
+}
 
-  nav a{
-    margin-left:0;
-    font-size:0.9rem;
-  }
+.hero h1{
+font-size:2.4rem;
+}
 
-  .hero{
-    flex-direction:column;
-    text-align:center;
-    padding:160px 5% 60px;
-  }
+.movies-grid{
+grid-template-columns:1fr;
+}
 
-  .hero-text h1{
-    font-size:2.4rem;
-  }
+.movie-card img{
+height:260px;
+}
 
-  .hero-text p{
-    font-size:0.95rem;
-  }
+.movie-actions{
+flex-direction:column;
+}
 
-  .btns{
-    justify-content:center;
-  }
+.manage-item{
+flex-direction:column;
+align-items:flex-start;
+}
 
-  .movies-grid{
-    grid-template-columns:1fr;
-  }
-
-  .movie-card img{
-    height:260px;
-  }
-
-  .movie-actions-group{
-    flex-direction:column;
-  }
-
-  .upload-area{
-    padding:30px 20px;
-  }
-
-  .section-title{
-    font-size:2rem;
-  }
 }
 
 </style>
@@ -424,89 +309,67 @@ footer{
 
 <header>
 
-<div class="logo">
-<div class="logo-icon">▶</div>
-CINEFLEX
-</div>
+<div class="logo">CINEFLEX</div>
 
 <nav>
 <a href="#home">Home</a>
-<a href="#features">Features</a>
+<a href="#admin">Dashboard</a>
 <a href="#upload">Upload</a>
 <a href="#movies">Movies</a>
-<a href="#contact">Contact</a>
 </nav>
 
 </header>
 
 <section class="hero" id="home">
 
-<div class="hero-text">
 <h1>Unlimited Movies With <span>CINEFLEX</span></h1>
 
 <p>
-Experience futuristic movie streaming with responsive design,
-mobile support, animations and smooth performance.
+Modern streaming platform with admin dashboard,
+movie uploads and responsive design.
 </p>
 
-<div class="btns">
-<a href="#movies" class="btn primary">Explore Movies</a>
-<a href="#upload" class="btn secondary">Upload Content</a>
-</div>
+<a href="#movies" class="btn">Explore Movies</a>
 
-</div>
-
-<div class="hero-card">
-
-<div class="card">
-
-<img src="https://images.unsplash.com/photo-1489599849927-2ee91cede3ba?q=80&w=1200" alt="Cinema">
-
-<div class="card-content">
-<h2>Next Generation Streaming</h2>
-
-<p>
-Modern cinematic experience with smooth UI and animations.
-</p>
-
-<a href="#features" class="btn primary">Learn More</a>
-
-</div>
-</div>
-</div>
 </section>
 
-<section id="features">
+<section id="admin">
 
 <h2 class="section-title">
-Why Choose <span>CINEFLEX</span>
+Admin <span>Dashboard</span>
 </h2>
 
-<div class="features">
+<div class="admin-container">
 
-<div class="feature-box">
-<div class="feature-icon">🎬</div>
-<h3>Streaming</h3>
-<p>Watch movies online smoothly.</p>
+<div class="input-group">
+<input type="text" id="movieTitle" placeholder="Movie Title">
 </div>
 
-<div class="feature-box">
-<div class="feature-icon">⚡</div>
-<h3>Fast</h3>
-<p>Optimized performance on all devices.</p>
+<div class="input-group">
+<input type="text" id="movieGenre" placeholder="Genre">
 </div>
 
-<div class="feature-box">
-<div class="feature-icon">📥</div>
-<h3>Upload</h3>
-<p>Upload your own videos instantly.</p>
+<div class="input-group">
+<input type="text" id="movieImg" placeholder="Poster Image URL">
 </div>
 
-<div class="feature-box">
-<div class="feature-icon">✨</div>
-<h3>Modern UI</h3>
-<p>Glassmorphism and modern effects.</p>
+<div class="input-group">
+<input type="text" id="movieLink" placeholder="Movie Link">
 </div>
+
+<button class="admin-btn" onclick="saveMovie()">
+Add Movie
+</button>
+
+</div>
+
+<div class="admin-container">
+
+<h3 style="margin-bottom:20px;">
+Manage Movies
+</h3>
+
+<div id="adminList"></div>
 
 </div>
 
@@ -515,14 +378,12 @@ Why Choose <span>CINEFLEX</span>
 <section id="upload">
 
 <h2 class="section-title">
-Upload <span>Content</span>
+Upload <span>Videos</span>
 </h2>
 
 <div class="upload-area">
 
-<h3>Upload Movies or TV Series</h3>
-
-<p>Select video file to preview instantly.</p>
+<h3>Upload Video File</h3>
 
 <label for="movieUpload" class="upload-btn">
 Choose Video
@@ -530,7 +391,7 @@ Choose Video
 
 <input type="file" id="movieUpload" accept="video/*">
 
-<div id="previewContainer" style="margin-top:35px;"></div>
+<div id="previewContainer" style="margin-top:30px;"></div>
 
 </div>
 
@@ -542,68 +403,45 @@ Choose Video
 Trending <span>Movies</span>
 </h2>
 
-<div class="movies-grid" id="mainMoviesGrid"></div>
-
-</section>
-
-<section id="contact">
-
-<div class="contact">
-
-<h2>Contact CINEFLEX</h2>
-
-<p>Email: chandisadeepanasw2006@gmail.com</p>
-
-<p>Phone: +94 74 076 3802</p>
-
-</div>
+<div class="movies-grid" id="moviesGrid"></div>
 
 </section>
 
 <footer>
-© 2026 CINEFLEX. All Rights Reserved.
+© 2026 CINEFLEX
 </footer>
 
 <script>
 
-const movies = [
+let currentEdit=-1;
+
+let movies=JSON.parse(localStorage.getItem('movies')) || [
 
 {
 title:"Cyber Future",
-genre:"Action • Sci-Fi",
+genre:"Sci-Fi",
 img:"https://images.unsplash.com/photo-1534447677768-be436bb09401?q=80&w=400",
-link:"#"
-},
-
-{
-title:"Shadow World",
-genre:"Thriller • Mystery",
-img:"https://images.unsplash.com/photo-1478760329108-5c3ed9d495a0?q=80&w=400",
-link:"#"
-},
-
-{
-title:"Dream Escape",
-genre:"Adventure • Fantasy",
-img:"https://images.unsplash.com/photo-1509198397868-475647b2a1e5?q=80&w=400",
 link:"#"
 }
 
 ];
 
-const grid=document.getElementById('mainMoviesGrid');
+function saveStorage(){
+localStorage.setItem('movies',JSON.stringify(movies));
+}
 
 function loadMovies(){
 
+const grid=document.getElementById('moviesGrid');
 grid.innerHTML='';
 
-movies.forEach(m=>{
+movies.forEach((m,index)=>{
 
 grid.innerHTML+=`
 
 <div class="movie-card">
 
-<img loading="lazy" src="${m.img}" alt="Poster">
+<img src="${m.img}" alt="movie">
 
 <div class="movie-info">
 
@@ -611,13 +449,13 @@ grid.innerHTML+=`
 
 <p>${m.genre}</p>
 
-<div class="movie-actions-group">
+<div class="movie-actions">
 
 <a href="${m.link}" class="watch-btn">
 Watch
 </a>
 
-<a href="${m.link}" class="download-btn-inline">
+<a href="${m.link}" class="download-btn">
 Download
 </a>
 
@@ -631,13 +469,109 @@ Download
 
 });
 
+renderAdmin();
+
 }
+
+function renderAdmin(){
+
+const list=document.getElementById('adminList');
+
+list.innerHTML='';
+
+movies.forEach((m,index)=>{
+
+list.innerHTML+=`
+
+<div class="manage-item">
+
+<div>
+<h4>${m.title}</h4>
+<p>${m.genre}</p>
+</div>
+
+<div class="manage-buttons">
+
+<button class="edit-btn"
+onclick="editMovie(${index})">
+Edit
+</button>
+
+<button class="delete-btn"
+onclick="deleteMovie(${index})">
+Delete
+</button>
+
+</div>
+
+</div>
+
+`;
+
+});
+
+}
+
+function saveMovie(){
+
+const title=document.getElementById('movieTitle').value;
+const genre=document.getElementById('movieGenre').value;
+const img=document.getElementById('movieImg').value;
+const link=document.getElementById('movieLink').value;
+
+if(!title || !genre){
+alert('Enter title and genre');
+return;
+}
+
+const obj={
+title,
+genre,
+img:img || 'https://images.unsplash.com/photo-1489599849927-2ee91cede3ba?q=80&w=400',
+link:link || '#'
+};
+
+if(currentEdit===-1){
+movies.unshift(obj);
+}else{
+movies[currentEdit]=obj;
+currentEdit=-1;
+}
+
+saveStorage();
+loadMovies();
+
+document.getElementById('movieTitle').value='';
+document.getElementById('movieGenre').value='';
+document.getElementById('movieImg').value='';
+document.getElementById('movieLink').value='';
+
+}
+
+function editMovie(index){
+
+const m=movies[index];
+
+document.getElementById('movieTitle').value=m.title;
+document.getElementById('movieGenre').value=m.genre;
+document.getElementById('movieImg').value=m.img;
+document.getElementById('movieLink').value=m.link;
+
+currentEdit=index;
+
+}
+
+function deleteMovie(index){
+
+movies.splice(index,1);
+
+saveStorage();
 
 loadMovies();
 
-const uploadInput=document.getElementById('movieUpload');
+}
 
-const previewContainer=document.getElementById('previewContainer');
+const uploadInput=document.getElementById('movieUpload');
 
 uploadInput.addEventListener('change',function(){
 
@@ -645,83 +579,37 @@ const file=this.files[0];
 
 if(file){
 
-const videoURL=URL.createObjectURL(file);
+const url=URL.createObjectURL(file);
 
-previewContainer.innerHTML=`
+document.getElementById('previewContainer').innerHTML=`
 
 <video controls autoplay
-style="width:100%;max-width:850px;border-radius:22px;">
+style="width:100%;max-width:800px;border-radius:20px;">
 
-<source src="${videoURL}" type="${file.type}">
+<source src="${url}" type="${file.type}">
 
 </video>
 
-<p style="margin-top:18px;color:#00ff77;">
-✔ Uploaded : ${file.name}
-</p>
-
 `;
-
-let cleanedTitle=file.name.replace(/\.[^/.]+$/, "");
 
 movies.unshift({
 
-title:cleanedTitle,
+title:file.name.replace(/\.[^/.]+$/, ""),
 genre:"Uploaded Video",
 img:"https://images.unsplash.com/photo-1489599849927-2ee91cede3ba?q=80&w=400",
-link:videoURL
+link:url
+
+});
+
+saveStorage();
+
+loadMovies();
+
+}
 
 });
 
 loadMovies();
-
-setTimeout(()=>{
-
-window.scrollTo({
-
-top:document.getElementById('movies').offsetTop-70,
-behavior:'smooth'
-
-});
-
-},1000);
-
-}
-
-});
-
-document.querySelectorAll('nav a, .btns a').forEach(link=>{
-
-link.addEventListener('click',function(e){
-
-const targetId=this.getAttribute('href');
-
-if(targetId.startsWith('#')){
-
-e.preventDefault();
-
-const target=document.querySelector(targetId);
-
-if(target){
-
-const y=
-target.getBoundingClientRect().top+
-window.pageYOffset-80;
-
-window.scrollTo({
-
-top:y,
-behavior:'smooth'
-
-});
-
-}
-
-}
-
-});
-
-});
 
 </script>
 
