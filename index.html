@@ -175,8 +175,7 @@
 
       <div class="admin-container">
         <h3>📝 Manage Uploaded Movies</h3>
-        <div id="adminMoviesList" style="max-height: 350px; overflow-y: auto;">
-          </div>
+        <div id="adminMoviesList" style="max-height: 350px; overflow-y: auto;"></div>
       </div>
     </div>
   </section>
@@ -218,32 +217,72 @@
 
   <footer>© 2026 CINEFLEX. All Rights Reserved.</footer>
 
+  <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-app.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-database.js"></script>
+
   <script>
-    let currentEditingIndex = -1;
+    // ⚙️ 1. FIREBASE CONFIGURATION (මෙතනට ඔයාගේ Firebase විස්තර ටික දාන්න)
+    const firebaseConfig = {
+      apiKey: "YOUR_FIREBASE_API_KEY",
+      authDomain: "YOUR_FIREBASE_AUTH_DOMAIN",
+      databaseURL: "YOUR_FIREBASE_DATABASE_URL",
+      projectId: "YOUR_FIREBASE_PROJECT_ID",
+      storageBucket: "YOUR_FIREBASE_STORAGE_BUCKET",
+      messagingSenderId: "YOUR_FIREBASE_MESSAGING_SENDER_ID",
+      appId: "YOUR_FIREBASE_APP_ID"
+    };
+    
+    // Firebase Initialize කිරීම
+    firebase.initializeApp(firebaseConfig);
+    const database = firebase.database();
 
-    // 🎬 1. ඔයාගේ ප්‍රධාන චිත්‍රපට ලිස්ට් එක මුලින්ම Local Storage එකට Setup කිරීම
-    function initializeMovies() {
-        const defaultMovies = [
-            { title: "Man vs Baby", genre: "Comedy/Family", img: "https://images.unsplash.com/photo-1608889174637-3c44f6326f20?q=80&w=400", link: "#", download: "#" },
-            { title: "Cyber Future", genre: "Action • Sci‑Fi", img: "https://images.unsplash.com/photo-1534447677768-be436bb09401?q=80&w=400", link: "#", download: "#" },
-            { title: "Shadow World", genre: "Thriller • Mystery", img: "https://images.unsplash.com/photo-1478760329108-5c3ed9d495a0?q=80&w=400", link: "#", download: "#" },
-            { title: "Dream Escape", genre: "Adventure • Fantasy", img: "https://images.unsplash.com/photo-1509198397868-475647b2a1e5?q=80&w=400", link: "#", download: "#" },
-            { title: "Last Horizon", genre: "Sci-Fi | Action", img: "https://images.unsplash.com/photo-1451187580459-43490279c0fa?q=80&w=400", link: "#", download: "#" }
-        ];
+    let currentEditingKey = null; // LocalStorage index වෙනුවට Firebase Unique ID එක ගනී
+    let globalMoviesArray = []; // දත්ත පහසුවෙන් හැසිරවීමට තබාගන්නා array එකක්
 
-        // Local Storage එකේ මුකුත්ම නැත්නම් විතරක් මේ ලිස්ට් එක සේව් කරයි
-        if (!localStorage.getItem('movies')) {
-            localStorage.setItem('movies', JSON.stringify(defaultMovies));
-        }
+    // 🎬 2. Default Movies සෙටප් කිරීම සහ Database එකෙන් දත්ත කියවීම
+    function listenToMovies() {
+        const moviesRef = database.ref('movies');
+        
+        moviesRef.on('value', (snapshot) => {
+            const data = snapshot.val();
+            globalMoviesArray = [];
+            
+            if (data) {
+                // Database එකේ දත්ත තිබේ නම් ඒවා Array එකකට හරවා ගනී
+                Object.keys(data).forEach(key => {
+                    globalMoviesArray.push({ firebaseKey: key, ...data[key] });
+                });
+            } else {
+                // කිසිම දත්තයක් නැත්නම් විතරක් Default Movies ටික Database එකට ඇතුළත් කරයි
+                const defaultMovies = [
+                    { title: "Man vs Baby", genre: "Comedy/Family", img: "https://images.unsplash.com/photo-1608889174637-3c44f6326f20?q=80&w=400", link: "#", download: "#" },
+                    { title: "Cyber Future", genre: "Action • Sci‑Fi", img: "https://images.unsplash.com/photo-1534447677768-be436bb09401?q=80&w=400", link: "#", download: "#" },
+                    { title: "Shadow World", genre: "Thriller • Mystery", img: "https://images.unsplash.com/photo-1478760329108-5c3ed9d495a0?q=80&w=400", link: "#", download: "#" },
+                    { title: "Dream Escape", genre: "Adventure • Fantasy", img: "https://images.unsplash.com/photo-1509198397868-475647b2a1e5?q=80&w=400", link: "#", download: "#" },
+                    { title: "Last Horizon", genre: "Sci-Fi | Action", img: "https://images.unsplash.com/photo-1451187580459-43490279c0fa?q=80&w=400", link: "#", download: "#" }
+                ];
+                
+                defaultMovies.forEach(movie => {
+                    moviesRef.push(movie);
+                });
+                return;
+            }
+
+            // UI එක Update කිරීම (සජීවීව හැම තැනටම අප්ඩේට් වේ)
+            renderMainMovies(globalMoviesArray);
+            renderAdminMovieList(globalMoviesArray);
+        });
     }
 
-    // 🔗 2. සයිට් එකේ Movies ප්‍රධාන Grid එක ලෝඩ් කිරීම
-    function loadMainMovies() {
-        const allMovies = JSON.parse(localStorage.getItem('movies')) || [];
+    // 🔗 3. සයිට් එකේ Movies ප්‍රධාන Grid එක පෙන්වීම
+    function renderMainMovies(movies) {
         const grid = document.getElementById('mainMoviesGrid');
         grid.innerHTML = '';
         
-        allMovies.forEach(m => {
+        // අලුතින්ම දාන ඒවා මුලට පෙනෙන්න Reverse කරයි
+        const displayList = [...movies].reverse();
+
+        displayList.forEach(m => {
             const movieLink = m.link ? m.link : '#';
             let downloadButtonHTML = '';
             
@@ -271,7 +310,7 @@
         });
     }
 
-    // 🔒 3. Auth Status සහ Admin පැනලය පාලනය
+    // 🔒 4. Auth Status පාලනය
     function checkAuthStatus() {
         const loggedInUser = JSON.parse(localStorage.getItem('loggedInUser'));
         const authStatusContainer = document.getElementById('authStatus');
@@ -282,7 +321,6 @@
             if(loggedInUser.role === 'admin') {
                 adminSection.style.display = 'block';
                 dashMenuLink.style.display = 'inline-block';
-                renderAdminMovieList(); 
             }
             authStatusContainer.innerHTML = `
                 <span class="user-tag">👋 ${loggedInUser.name}</span>
@@ -294,18 +332,19 @@
         }
     }
 
-    // 📝 4. ඇඩ්මින් පැනලයේ තියෙන වෙනස්කම් කරන ලිස්ට් එක හැදීම (දැන් හැම එකක්ම මෙතන තියෙනවා)
-    function renderAdminMovieList() {
-        const allMovies = JSON.parse(localStorage.getItem('movies')) || [];
+    // 📝 5. ඇඩ්මින් පැනලයේ ලිස්ට් එක හැදීම
+    function renderAdminMovieList(movies) {
         const container = document.getElementById('adminMoviesList');
         
-        if(allMovies.length === 0) {
+        if(movies.length === 0) {
             container.innerHTML = '<p style="color:#6e7282; font-size:0.95rem;">No movies available.</p>';
             return;
         }
 
+        const displayList = [...movies].reverse();
         let tableHTML = `<table class="manage-table">`;
-        allMovies.forEach((movie, index) => {
+        
+        displayList.forEach(movie => {
             tableHTML += `
                 <tr>
                     <td>
@@ -314,8 +353,8 @@
                     </td>
                     <td>
                         <div class="action-btns">
-                            <button class="edit-inline-btn" onclick="startEditMovie(${index})">Edit</button>
-                            <button class="delete-inline-btn" onclick="deleteMovie(${index})">Delete</button>
+                            <button class="edit-inline-btn" onclick="startEditMovie('${movie.firebaseKey}')">Edit</button>
+                            <button class="delete-inline-btn" onclick="deleteMovie('${movie.firebaseKey}')">Delete</button>
                         </div>
                     </td>
                 </tr>
@@ -325,10 +364,10 @@
         container.innerHTML = tableHTML;
     }
 
-    // ✍ 5. ෆිල්ම් එකක් Edit කරන්න දත්ත Form එකට ගැනීම
-    function startEditMovie(index) {
-        const allMovies = JSON.parse(localStorage.getItem('movies')) || [];
-        const movie = allMovies[index];
+    // ✍ 6. ෆිල්ම් එකක් Edit කරන්න Form එකට දත්ත ගැනීම
+    function startEditMovie(firebaseKey) {
+        const movie = globalMoviesArray.find(m => m.firebaseKey === firebaseKey);
+        if(!movie) return;
 
         document.getElementById('movieTitle').value = movie.title;
         document.getElementById('movieGenre').value = movie.genre;
@@ -336,7 +375,7 @@
         document.getElementById('movieLink').value = movie.link && movie.link !== '#' ? movie.link : '';
         document.getElementById('movieDownload').value = movie.download && movie.download !== '#' ? movie.download : '';
 
-        currentEditingIndex = index;
+        currentEditingKey = firebaseKey;
         document.getElementById('formTitle').innerText = "✍ Edit Movie Content";
         document.getElementById('submitFormBtn').innerText = "Update Movie";
         document.getElementById('submitFormBtn').style.background = "linear-gradient(90deg, #00ff77, #0077ff)";
@@ -344,7 +383,7 @@
         window.scrollTo({ top: document.getElementById('adminSection').offsetTop - 80, behavior: 'smooth' });
     }
 
-    // 💾 6. Add හෝ Update සේව් කරන ප්‍රධාන Function එක
+    // 💾 7. Add හෝ Update Firebase වෙත සේව් කිරීම
     function saveMovieFromDash() {
         const title = document.getElementById('movieTitle').value.trim();
         const genre = document.getElementById('movieGenre').value.trim();
@@ -365,24 +404,20 @@
             download: download ? download : "#"
         };
 
-        let allMovies = JSON.parse(localStorage.getItem('movies')) || [];
-
-        if (currentEditingIndex === -1) {
-            allMovies.unshift(movieObj);
+        if (currentEditingKey === null) {
+            // අලුත් ෆිල්ම් එකක් එකතු කිරීම
+            database.ref('movies').push(movieObj);
         } else {
-            allMovies[currentEditingIndex] = movieObj;
+            // තියෙන ෆිල්ම් එකක් අප්ඩේට් කිරීම
+            database.ref('movies/' + currentEditingKey).set(movieObj);
             
-            currentEditingIndex = -1;
+            currentEditingKey = null;
             document.getElementById('formTitle').innerText = "Add New Movie";
             document.getElementById('submitFormBtn').innerText = "Add Movie";
             document.getElementById('submitFormBtn').style.background = "#0077ff";
         }
 
-        localStorage.setItem('movies', JSON.stringify(allMovies));
-
-        loadMainMovies();
-        renderAdminMovieList();
-
+        // Form එක Clear කිරීම
         document.getElementById('movieTitle').value = '';
         document.getElementById('movieGenre').value = '';
         document.getElementById('movieImg').value = '';
@@ -394,15 +429,10 @@
         setTimeout(() => { statusMsg.style.display = 'none'; }, 3000);
     }
 
-    // ❌ 7. ෆිල්ම් එකක් මකා දැමීම
-    function deleteMovie(index) {
+    // ❌ 8. ෆิල්ම් එකක් මකා දැමීම
+    function deleteMovie(firebaseKey) {
         if(confirm("Are you sure you want to delete this movie?")) {
-            let allMovies = JSON.parse(localStorage.getItem('movies')) || [];
-            allMovies.splice(index, 1);
-            localStorage.setItem('movies', JSON.stringify(allMovies));
-            
-            loadMainMovies();
-            renderAdminMovieList();
+            database.ref('movies/' + firebaseKey).remove();
         }
     }
 
@@ -445,9 +475,8 @@
     revealElements.forEach(el => { el.style.opacity = '0'; el.style.transform = 'translateY(40px)'; });
     window.addEventListener('scroll', revealOnScroll);
     
-    // ආරම්භක පියවරයන්
-    initializeMovies();
-    loadMainMovies();
+    // ආරම්භක පියවරයන් (දැන් කෙලින්ම Database එකට සවන් දෙයි)
+    listenToMovies();
     checkAuthStatus();
     setTimeout(revealOnScroll, 300); 
   </script>
