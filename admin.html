@@ -1,0 +1,96 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8"><title>CINEFLEX | Admin Dashboard</title>
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;700&display=swap" rel="stylesheet">
+  <style>
+    body{ background:#050816; color:#fff; font-family:'Poppins', sans-serif; padding:40px; }
+    .header{ display:flex; justify-content:space-between; align-items:center; border-bottom:1px solid #222; padding-bottom:20px; }
+    .logout-btn { padding:10px 20px; background:#ff004f; border:none; border-radius:10px; color:white; cursor:pointer; font-weight:bold; }
+    .content{ display:flex; gap:40px; margin-top:30px; }
+    .form-box{ background:rgba(255,255,255,0.05); padding:30px; border-radius:20px; width:400px; border:1px solid rgba(255,255,255,0.1); height: fit-content;}
+    input{ width:100%; padding:12px; margin:10px 0; border:1px solid rgba(255,255,255,0.2); background:rgba(0,0,0,0.2); border-radius:10px; color:white; box-sizing: border-box; }
+    .submit-btn{ width:100%; padding:12px; border:none; border-radius:10px; background:#0077ff; color:white; font-weight:bold; cursor:pointer; }
+    .movie-list{ flex:1; }
+    .movie-item{ display:flex; justify-content:space-between; align-items:center; background:rgba(255,255,255,0.02); padding:15px; margin-bottom:10px; border-radius:12px; border:1px solid rgba(255,255,255,0.05); }
+    .movie-item img { width: 50px; height: 50px; object-fit: cover; border-radius: 8px; margin-right: 15px; }
+    .flex-left { display: flex; align-items: center; }
+    .del-btn { background:#ff004f; border:none; padding:8px 12px; color:white; border-radius:8px; cursor:pointer; }
+  </style>
+</head>
+<body>
+
+<div class="header">
+  <h2>⚡ CINEFLEX Admin Dashboard</h2>
+  <button class="logout-btn" onclick="logout()">Logout</button>
+</div>
+
+<div class="content">
+  <div class="form-box">
+    <h3>Add New Movie</h3>
+    <form id="addMovieForm">
+      <input type="text" id="mTitle" placeholder="Movie Title" required>
+      <input type="text" id="mGenre" placeholder="Genre (e.g. Action • Sci-Fi)" required>
+      <input type="text" id="mImg" placeholder="Image URL (Unsplash Link)" required>
+      <button type="submit" class="submit-btn">Add Movie</button>
+    </form>
+  </div>
+
+  <div class="movie-list">
+    <h3>Current Movies Database</h3>
+    <div id="moviesContainer"></div>
+  </div>
+</div>
+
+<script src="database.js"></script>
+<script>
+  // ආරක්ෂාව සඳහා: ලොග් වෙලා නැත්නම් හෝ ඇඩ්මින් කෙනෙක් නෙවෙයි නම් එලවන්න
+  const user = JSON.parse(localStorage.getItem('loggedInUser'));
+  if(!user || user.role !== 'admin') { window.location.href = 'login.html'; }
+
+  function renderMovies() {
+      const movies = DB.getMovies();
+      const container = document.getElementById('moviesContainer');
+      container.innerHTML = '';
+      movies.forEach((m, index) => {
+          container.innerHTML += `
+              <div class="movie-item">
+                <div class="flex-left">
+                    <img src="${m.img}" alt="">
+                    <div>
+                        <strong>${m.title}</strong><br><small style="color:#aaa">${m.genre}</small>
+                    </div>
+                </div>
+                <button class="del-btn" onclick="deleteMovie(${index})">Delete</button>
+              </div>
+          `;
+      });
+  }
+
+  document.getElementById('addMovieForm').addEventListener('submit', function(e){
+      e.preventDefault();
+      const title = document.getElementById('mTitle').value;
+      const genre = document.getElementById('mGenre').value;
+      const img = document.getElementById('mImg').value;
+
+      DB.saveMovie({title, genre, img});
+      document.getElementById('addMovieForm').reset();
+      renderMovies();
+  });
+
+  function deleteMovie(index) {
+      let movies = DB.getMovies();
+      movies.splice(index, 1);
+      localStorage.setItem('movies', JSON.stringify(movies));
+      renderMovies();
+  }
+
+  function logout() {
+      localStorage.removeItem('loggedInUser');
+      window.location.href = 'login.html';
+  }
+
+  renderMovies();
+</script>
+</body>
+</html>
