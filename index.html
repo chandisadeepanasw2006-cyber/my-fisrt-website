@@ -151,35 +151,14 @@
   <footer>© 2026 CINEFLEX. All Rights Reserved.</footer>
 
   <script>
-    // 🔗 1. JavaScript Array එකෙන් සෘජුවම දත්ත කියවා ඕනෑම Device එකකට පොදුවේ පෙන්වීම
+    // 🔗 1. LocalStorage එකෙන් ඇඩ්මින් දාන දත්ත කියවා පෙන්වීම
     function loadMainMovies() {
-        // [💡 ඔයාට අවශ්‍ය විදිහට මෙතන තියෙන Movies වල විස්තර සහ Links වෙනස් කරගන්න පුළුවන්]
-        const localMovies = [
-            {
-                title: "Avatar: The Way of Water",
-                genre: "Action | Sci-Fi | Adventure",
-                img: "https://images.unsplash.com/photo-1536440136628-849c177e76a1?q=80&w=400", 
-                link: "https://www.w3schools.com/html/mov_bbb.mp4" // උදාහරණ වීඩියෝ ලින්ක් එකක් (ඔයාගේ එක මෙතනට දාන්න)
-            },
-            {
-                title: "Interstellar",
-                genre: "Sci-Fi | Drama | Space",
-                img: "https://images.unsplash.com/photo-1446776811953-b23d57bd21aa?q=80&w=400",
-                link: "https://www.w3schools.com/html/movie.mp4" 
-            },
-            {
-                title: "The Dark Knight",
-                genre: "Action | Crime | Drama",
-                img: "https://images.unsplash.com/photo-1509281373149-e957c6296406?q=80&w=400",
-                link: "#"
-            }
-        ];
-
+        const localMovies = JSON.parse(localStorage.getItem('movies')) || [];
         const grid = document.getElementById('mainMoviesGrid');
         grid.innerHTML = '';
         
         if(localMovies.length === 0) {
-            grid.innerHTML = `<p style="color:#8c8ca1; text-align:center; grid-column: 1/-1; font-size:1.2rem;">No movies available.</p>`;
+            grid.innerHTML = `<p style="color:#8c8ca1; text-align:center; grid-column: 1/-1; font-size:1.2rem;">No movies available. Add movies via Admin Dashboard.</p>`;
             return;
         }
         
@@ -200,7 +179,7 @@
         });
     }
 
-    // 🔒 2. Navbar Auth Status
+    // 🔒 2. Navbar එකේ ඇඩ්මින් නම් Dashboard බටන් එක පෙන්වීම
     function checkAuthStatus() {
         const loggedInUser = JSON.parse(localStorage.getItem('loggedInUser'));
         const authStatusContainer = document.getElementById('authStatus');
